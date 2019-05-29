@@ -9,12 +9,5 @@ var d1valid = require('d1valid');
 
 
 d1.load(function(){
-  d1.init();
-  d1dialog.init();
-  d1gallery.init();
-  d1calendar.init();
-  d1lookup.init();
-  d1edit.init();
-  d1tablex.init();
-  d1valid.init();
+  d1.init({}, {}, {}, true);
 });
