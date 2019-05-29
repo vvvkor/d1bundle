@@ -1,18 +1,18 @@
 {
   "name": "d1bundle",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "d1 bundle",
   "main": "dist/d1bundle.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "copy:css": "copyfiles ./node_modules/d1css/src/*.css ./dist -f",
-    "//build-beautify:js": "uglifyjs --verbose --beautify --comments '/^/*!/' --output ./dist/d1.js ./src/d1.js",
-    "//build:js": "copyfiles ./node_modules/d1css/src/d1.js ./dist -f",
+    "copy:css": "copyfiles ./node_modules/d1css/dist/d1.css ./node_modules/d1css/dist/d1.min.css ./dist -f",
     "browserify:js": "browserify -o ./dist/d1bundle.js ./src/d1bundle.js",
-    "minify:js": "uglifyjs --verbose --comments /^!/ --output ./dist/d1bundle.min.js ./dist/d1bundle.js",
-    "build": "npm run copy:css && npm run browserify:js && npm run minify:js",
+    "join:js": "uglifyjs ./node_modules/d1css/src/d1.js ./node_modules/d1dialog/d1dialog.js ./node_modules/d1gallery/d1gallery.js ./node_modules/d1tablex/d1tablex.js ./node_modules/d1calendar/d1calendar.js ./node_modules/d1lookup/d1lookup.js ./node_modules/d1edit/d1edit.js ./node_modules/d1valid/d1valid.js --comments '/^/*!/' -o ./dist/d1join.js",
+    "minify-bundle:js": "uglifyjs --verbose --comments /^!/ -o ./dist/d1bundle.min.js ./dist/d1bundle.js",
+    "minify-join:js": "uglifyjs --verbose --comments /^!/ -o ./dist/d1join.min.js ./dist/d1join.js",
+    "build": "npm run copy:css && npm run browserify:js && npm run join:js && npm run minify-bundle:js && npm run minify-join:js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -35,24 +35,16 @@
   "homepage": "https://github.com/vvvkor/d1bundle#readme",
   "dependencies": {},
   "devDependencies": {
-    "d1css": "^1.2",
-    "d1calendar": "^1.2",
-    "d1dialog": "^1.2",
-    "d1edit": "^1.2",
-    "d1gallery": "^1.2",
-    "d1lookup": "^1.2",
-    "d1tablex": "^1.2",
-    "d1valid": "^1.0",
     "browserify": "^16.0",
     "copyfiles": "^2.1.0",
-    "cross-var": "^1.1.0",
-    "cssnano": "^3.10.0",
-    "perfectionist": "^2.4.0",
-    "postcss-calc": "^7.0.1",
-    "postcss-cli": "^2.6.0",
-    "postcss-custom-properties": "^8.0.9",
-    "postcss-discard-comments": "^2.0.4",
-    "replace-in-file": "^3.4.2",
+    "d1calendar": "^1.2.5",
+    "d1css": "^1.2.39",
+    "d1dialog": "^1.2.6",
+    "d1edit": "^1.2.8",
+    "d1gallery": "^1.2.5",
+    "d1lookup": "^1.2.7",
+    "d1tablex": "^1.2.9",
+    "d1valid": "^1.0.4",
     "uglify-js": "^3.3.27"
   }
 }

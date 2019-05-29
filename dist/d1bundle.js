@@ -216,13 +216,15 @@ var main = new(function() {
     return d1.ins('a', s, {href: h, className: this.opt.cBtn}, p);
   }
   
+  d1.plug(this);
+
 })();
 
   if(typeof module !== "undefined") module.exports = main;
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.38 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.39 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -296,14 +298,20 @@ var main = new(function() {
   
   this.noMem = 0;
   
+  this.plugins = [];
+  
   //common
 
-  this.load = function(obj, opt) {
+  this.load = function(obj, opt, plug) {
     if (!obj) obj = this;
-    this.b("", [document], "DOMContentLoaded", typeof obj === "function" ? obj : obj.init.bind(obj, opt));
+    this.b("", [document], "DOMContentLoaded", typeof obj === "function" ? obj : obj.init.bind(obj, opt, [], [], plug));
   }
   
-  this.init = function(opt, str, ico) {
+  this.loadAll = function(opt){
+    this.load(this, opt, true);
+  }
+  
+  this.init = function(opt, str, ico, plug) {
     var i;
     for (i in opt) this.opt[i] = opt[i];
     for (i in str) this.str[i] = str[i];
@@ -314,6 +322,15 @@ var main = new(function() {
     if (window && !Element.prototype.matches) Element.prototype.matches = Element.prototype.msMatchesSelector; //ie9+
     this.getStrings();
     this.refresh();
+    if(plug) this.initPlugins();
+  }
+  
+  this.plug = function(p) {
+    this.plugins.push(p);
+  }
+  
+  this.initPlugins = function(){
+    for (var i in this.plugins) this.plugins[i].init();
   }
   
   this.q = function(s, i, n) {
@@ -871,6 +888,8 @@ var main = new(function() {
     return (location.hash == '#' + this.win.id);
   }
   
+  d1.plug(this);
+
 })();
 
   if(typeof module !== "undefined") module.exports = main;
@@ -1053,6 +1072,8 @@ var main = new(function () {
     n.style.height = (1.5 * (2 + (n.value.match(/\n/g) || []).length)) + 'em';
   }
 
+  d1.plug(this);
+
 })();
 
   if (typeof module !== "undefined") module.exports = main;
@@ -1134,6 +1155,8 @@ var main = new(function () {
       }
     }
   }
+
+  d1.plug(this);
 
 })();
 
@@ -1309,6 +1332,8 @@ main = new(function() {
     var u = n.getAttribute(this.opt.attrUrl);
     if(n.value.length>0 && u) location.href = u.replace(/\{id\}/, n.value);
   }
+
+  d1.plug(this);
 
 })();
 
@@ -1580,6 +1605,8 @@ main = new(function() {
     return NaN;
   }
 
+  d1.plug(this);
+
 })();
 
   if(typeof module !== "undefined") module.exports = main;
@@ -1672,6 +1699,8 @@ var main = new(function () {
       if(f) f.focus();
     }
   }
+  
+  d1.plug(this);
 
 })();
 
