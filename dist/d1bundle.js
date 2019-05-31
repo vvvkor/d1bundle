@@ -9,6 +9,8 @@ var main = new(function() {
 
   "use strict";
   
+  this.name = 'calendar';
+  
   this.opt = {
     cBtn: 'pad hover',
     dateFormat: 'd', //y=Y-m-d, d=d.m.Y, m=m/d Y
@@ -224,13 +226,14 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.39 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.40 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
   
   "use strict";
 
+  
   //check single instance
   if (window && window.d1) {
     console.log("d1 already included");
@@ -243,6 +246,8 @@ var main = new(function() {
 
   "use strict";
 
+  this.name = 'd1';
+  
   this.opt = {
     cAct: 'act',
     cAlert: 'alert',
@@ -302,13 +307,14 @@ var main = new(function() {
   
   //common
 
-  this.load = function(obj, opt, plug) {
+  this.load = function(obj, opt, str, ico, plug) {
     if (!obj) obj = this;
-    this.b("", [document], "DOMContentLoaded", typeof obj === "function" ? obj : obj.init.bind(obj, opt, [], [], plug));
+    this.b("", [document], "DOMContentLoaded", typeof obj === "function" ? obj : obj.init.bind(obj, opt, str, ico, plug));
   }
   
-  this.loadAll = function(opt){
-    this.load(this, opt, true);
+  this.loadAll = function(plug){
+    if(!plug) plug = {};
+    this.load(this, plug.opt, plug.str, plug.ico, plug);
   }
   
   this.init = function(opt, str, ico, plug) {
@@ -322,15 +328,15 @@ var main = new(function() {
     if (window && !Element.prototype.matches) Element.prototype.matches = Element.prototype.msMatchesSelector; //ie9+
     this.getStrings();
     this.refresh();
-    if(plug) this.initPlugins();
+    if(plug) this.initPlugins(plug);
   }
   
   this.plug = function(p) {
     this.plugins.push(p);
   }
   
-  this.initPlugins = function(){
-    for (var i in this.plugins) this.plugins[i].init();
+  this.initPlugins = function(opts){
+    for (var i in this.plugins) this.plugins[i].init(opts ? opts[this.plugins[i].name] : {});
   }
   
   this.q = function(s, i, n) {
@@ -777,6 +783,8 @@ var main = new(function() {
 
   "use strict";
   
+  this.name = 'dialog';
+  
   this.opt = {
     argConfirm: '_confirm',
     ccDialog: 'dlg pad c',
@@ -906,6 +914,8 @@ var main = new(function () {
 
   "use strict";
 
+  this.name = 'edit';
+  
   this.opt = {
     qsAdjust: 'textarea.adjust',
     qsEdit: 'textarea.edit',
@@ -1090,6 +1100,8 @@ var main = new(function () {
 
   "use strict";
 
+  this.name = 'gallery';
+  
   this.opt = {
     hashCancel: '#cancel',
     idPrefix: 'pic',
@@ -1173,6 +1185,8 @@ if(typeof module !== "undefined") var d1 = require('d1css');
 main = new(function() {
 
   "use strict";
+
+  this.name = 'lookup';
 
   this.opt = {
     attrLabel: 'data-label',
@@ -1351,6 +1365,8 @@ main = new(function() {
 
   "use strict";
 
+  this.name = 'tablex';
+  
   this.opt = {
     attrFilter: 'data-filter',
     cFilter: 'bg-w', // filter-on - non-empty filter field
@@ -1625,10 +1641,12 @@ if(typeof module !== "undefined") var d1 = require('d1css');
 var main = new(function () {
 
   "use strict";
-
+  
+  this.name = 'valid';
+  
   this.opt = {
-    qsValidate: 'form', //form.js-validate
-    cUnhint: 'js-unhint'
+    qsValidate: 'form', // set custom text for browser tooltips
+    cUnhint: 'js-unhint' // turn off browser tooltips
   };
   
   /*
@@ -1650,7 +1668,8 @@ var main = new(function () {
   this.init = function (opt) {
     var i;
     for (i in opt) this.opt[i] = opt[i];
-    d1.b('', "input, textarea, select", "", this.initInput.bind(this));
+    var q = this.opt.qsValidate;
+    d1.b('', q + " input, " + q + " textarea, "+ q +" select", "", this.initInput.bind(this));
     d1.b('', "form."+this.opt.cUnhint, "", this.unhint.bind(this));
     d1.b('', "form."+this.opt.cUnhint, "submit", this.validateForm.bind(this));
   }
@@ -1718,8 +1737,6 @@ var d1tablex = require('d1tablex');
 var d1valid = require('d1valid');
 
 
-d1.load(function(){
-  d1.init({}, {}, {}, true);
-});
+d1.loadAll();
 
 },{"d1calendar":1,"d1css":2,"d1dialog":3,"d1edit":4,"d1gallery":5,"d1lookup":6,"d1tablex":7,"d1valid":8}]},{},[9]);

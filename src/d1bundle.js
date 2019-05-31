@@ -8,6 +8,4 @@ var d1tablex = require('d1tablex');
 var d1valid = require('d1valid');
 
 
-d1.load(function(){
-  d1.init({}, {}, {}, true);
-});
+d1.loadAll();
