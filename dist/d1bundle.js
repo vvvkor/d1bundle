@@ -226,7 +226,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.42 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.43 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -621,7 +621,8 @@ var main = new(function() {
   
   this.getAjax = function(n, e) {
     e.preventDefault();
-    this.ajax(n.getAttribute("href"), this.q(n.getAttribute("data-target"),0));
+    var qs = n.getAttribute("data-target");
+    this.ajax(n.getAttribute("href"), qs=='#' ? true : this.q(qs,0));
   }
   
   this.ajax = function(url, n, callback) {
@@ -634,7 +635,10 @@ var main = new(function() {
   
   this.recv = function(req, n, callback, e) {
     if (req.status == "200") {
-      if (n) {
+      if (n===true){
+        this.showDialog(req.responseText);
+      }
+      else if (n) {
         n.innerHTML = req.responseText;
         var dlg = this.ancestor(".dlg, .full", n);
         if (dlg && dlg.id) location.hash = "#" + dlg.id;
