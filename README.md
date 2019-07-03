@@ -7,15 +7,15 @@ Bundled [d1](https://github.com/vvvkor/d1) and its plugins.
 ### Use bundled from CDN
 
 ```
-<link href="https://cdn.jsdelivr.net/npm/d1bundle@1.0.1/dist/d1.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/d1bundle@1.0.1/dist/d1bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/d1bundle/dist/d1.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/d1bundle/dist/d1bundle.min.js"></script>
 ```
 
 ### Use joined from CDN
 
 ```
-<link href="https://cdn.jsdelivr.net/npm/d1bundle@1.0.1/dist/d1.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/d1bundle@1.0.1/dist/d1join.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/d1bundle/dist/d1.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/d1bundle/dist/d1join.min.js"></script>
 <script>
   d1.loadAll(options);
 </script>
