@@ -229,7 +229,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.43 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.46 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -587,7 +587,8 @@ var main = new(function() {
   
   this.checkHide = function(t, n) {
     if (n.matches(this.opt.qsJsShow)) {
-      if (t ? (!n.parentNode.contains(t)) : !this.q(this.opt.qsJsShow, 0, n)) this.hide(n);
+      var a = t ? (this.ancestor('a',t) || t) : null;
+      if (t ? (!n.parentNode.contains(t) && a.hash != '#'+n.id) : !this.q(this.opt.qsJsShow, 0, n)) this.hide(n);
     }
   }
 
