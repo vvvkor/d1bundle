@@ -64,6 +64,7 @@ var main = new(function() {
   }
   
   this.switchMonth = function(n, y, m, d, ch, ci, e){
+    e.preventDefault();
     var h = ch ? parseInt(ch.textContent, 10) : 0;
     var i = ci ? parseInt(ci.textContent, 10) : 0;
     this.openDialog(n, new Date(y, m, d, h, i), e);
@@ -81,6 +82,7 @@ var main = new(function() {
 
   this.closeDialog = function(n, d, h, m, e){
     e.preventDefault();
+    e.stopPropagation();
     if(n){
       if(d !== null){
         n.value = (d===true) ? this.fmt(0, 0, n.vTime) : d;
@@ -187,7 +189,8 @@ var main = new(function() {
     }
   }
   
-  this.setTime = function(n, step, max){
+  this.setTime = function(n, step, max, e){
+    e.preventDefault();
     var v = (parseInt(n.textContent, 10) + step + max) % max;
     n.textContent = this.n(v);
   }
