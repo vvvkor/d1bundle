@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.12 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.14 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance
@@ -142,14 +142,14 @@ p.setAttribute("data-info",(this.opt.num?i+1+"/"+z+(a[i].title?" - ":""):"")+(a[
 }}};d1.plug(this)};if(typeof module!=="undefined")module.exports=main;else if(window)d1gallery=main})();/*! d1tablex https://github.com/vvvkor/d1tablex */
 /* Filter and sort HTML table */
 //table.sort[data-filter][data-filter-report][data-case][data-filter-cols]
-if(typeof module!=="undefined")var d1=require("d1css");(function(){main=new function(){"use strict";this.name="tablex";this.opt={attrFilter:"data-filter",cFilter:"bg-w",// filter-on - non-empty filter field
+if(typeof module!=="undefined")var d1=require("d1css");(function(){main=new function(){"use strict";this.name="tablex";this.lang="";this.skipComma=0;this.opt={attrFilter:"data-filter",cFilter:"bg-w",// filter-on - non-empty filter field
 cScan:"text-i",// col-scan - searchable columns' header (used if "data-filter-cols" is set)
 cShow:"",// row-show - matching row
 cHide:"hide",// row-hide - non-matching row (if not set the "display:none" is used)
 cSort:"",// col-sort - sortable column's header
 cAsc:"bg-y",// col-asc - !non-empty! - header of currently sorted column (ascending)
 cDesc:"bg-w",// col-desc - header of currently sorted column (descending)
-qsSort:"table.sort",wait:200};this.init=function(opt){var i;for(i in opt)this.opt[i]=opt[i];var t=document.querySelectorAll(this.opt.qsSort+", table["+this.opt.attrFilter+"]");
+qsSort:"table.sort",wait:200};this.init=function(opt){var i;for(i in opt)this.opt[i]=opt[i];this.lang=document.documentElement.getAttribute("lang")||"en";this.skipComma=this.lang=="en";console.log(this.lang);var t=document.querySelectorAll(this.opt.qsSort+", table["+this.opt.attrFilter+"]");
 //t.forEach(this.prepare.bind(this));
 for(i=0;i<t.length;i++)this.prepare(t[i])};this.prepare=function(n){var i,j,start=0;var tb=n.querySelector("tbody");var rh=n.querySelector("thead tr");if(!rh){rh=tb.rows[0];start=1}if(!rh||!tb||!tb.rows||tb.rows.length<2)return;var a=[];var h=[];for(j=0;j<rh.cells.length;j++){h[j]=rh.cells[j];
 //if (this.opt.cSort && this.isSortable(rh.cells[j])) h[j].classList.add(this.opt.cSort);
@@ -172,13 +172,13 @@ mode="b";aa=this.sz(a);bb=this.sz(b)}if(isNaN(aa)||isNaN(bb)){
 //interval?
 mode="i";aa=this.interval(a);bb=this.interval(b)}if(isNaN(aa)||isNaN(bb)){
 //number?
-mode="n";
-//use Number instead of parseFloat for more strictness
-aa=parseFloat(a.replace(/(\$|\,)/g,""));bb=parseFloat(b.replace(/(\$|\,)/g,""))}if(isNaN(aa)||isNaN(bb)){
+mode="n";aa=this.nr(a);bb=this.nr(b)}if(isNaN(aa)||isNaN(bb)){
 //string
 mode="s";aa=a;bb=b}
 //console.log('['+mode+'] A '+a+' = '+aa+' == '+(new Date(aa))+'; B '+b+' = '+bb+' == '+(new Date(bb)));
-return aa<bb?-1:aa>bb?1:0};this.dt=function(s){var m=s.match(/^(\d+)(\D)(\d+)\D(\d+)(\D(\d+))?(\D(\d+))?(\D(\d+))?(\D(\d+))?$/);if(m){var x;if(m[2]==".")x=[4,3,1];//d.m.Y
+return aa<bb?-1:aa>bb?1:0};this.nr=function(s){
+//use Number instead of parseFloat for more strictness
+s=this.skipComma?s.replace(/(\$|\,|\s)/g,""):s.replace(/(\$|\s)/g,"").replace(",",".");return parseFloat(s)};this.dt=function(s){var m=s.match(/^(\d+)(\D)(\d+)\D(\d+)(\D(\d+))?(\D(\d+))?(\D(\d+))?(\D(\d+))?$/);if(m){var x;if(m[2]==".")x=[4,3,1];//d.m.Y
 else if(m[2]=="/")x=[4,1,3];//m/d Y
 else x=[1,3,4];//Y-m-d
 var d=new Date(m[x[0]],m[x[1]]-1,m[x[2]],m[6]||0,m[8]||0,m[10]||0,m[12]||0);return d?d.getTime():NaN}return NaN};this.interval=function(s){var x={msec:.001,ms:.001,s:1,mi:60,sec:1,min:60,h:3600,d:86400,w:604800,m:2592e3,y:31536e3};var m=s.match(/^(\d+)\s*(y|m|w|d|h|min|mi|sec|s|ms|msec)$/i);if(m&&x[m[2]])return m[1]*x[m[2]];return NaN};this.sz=function(s){var x={b:1,kb:1024,mb:1048576,gb:1073741824,tb:1099511627776,pb:0x4000000000000};var m=s.match(/^((\d*\.)?\d+)\s*(([kmgtp]i?)?b)$/i);if(m){m[3]=m[3].replace(/ib$/i,"b").toLowerCase();if(x[m[3]])return m[1]*x[m[3]]}return NaN};d1.plug(this)};if(typeof module!=="undefined")module.exports=main;else if(window)d1tablex=main})();/*! d1calendar https://github.com/vvvkor/d1calendar */
