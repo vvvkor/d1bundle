@@ -19,7 +19,8 @@ var main = new(function() {
     icons: ['date', 'now', 'delete'],//[['svg-date', '&darr;'], ['svg-ok', '&bull;'], ['svg-delete', '&times;']],
     idPicker: 'pick-date',
     minWidth: 801,
-    qsCalendar: 'input.calendar'
+    qsCalendar: 'input.calendar',
+    stepMinutes: 1
   };
 
   this.win = null;
@@ -29,7 +30,7 @@ var main = new(function() {
     for(i in opt) this.opt[i] = opt[i];
 
     if(window.innerWidth < this.opt.minWidth) return;
-    this.win = d1.ins('div', '', {id: this.opt.idPicker, className: 'toggle pad'});
+    this.win = d1.ins('div', '', {id: this.opt.idPicker, className: 'toggle pad'});//dlg hide pad
     this.win.style.whiteSpace = 'nowrap';
     d1.setState(this.win, 0);
     document.querySelector('body').appendChild(this.win);
@@ -49,7 +50,7 @@ var main = new(function() {
     n.type = 'text';
     n.autocomplete = 'off';
     if(n.value) n.value = this.fmt(this.parse(n.value), 0, n.vTime);
-    var pop = d1.ins('div','',{className:'pop wide'},n,1);
+    var pop = d1.ins('div','',{className:'pop wide'},n,1); //''
     pop.appendChild(n);
     var ico = [];
     for(var i in this.opt.icons){
@@ -75,8 +76,8 @@ var main = new(function() {
     //n.parentNode.insertBefore(this.win, n.nextSibling);
     n.parentNode.appendChild(this.win);
     d1.setState(this.win, 1);
-    this.win.style.top = (n.offsetTop + n.offsetHeight) + 'px';
-    this.win.style.left = (n.offsetLeft) + 'px';
+//    this.win.style.top = (n.offsetTop + n.offsetHeight) + 'px';
+//    this.win.style.left = (n.offsetLeft) + 'px';
     this.build(n, d || n.value);
   }
 
@@ -84,14 +85,18 @@ var main = new(function() {
     e.preventDefault();
     e.stopPropagation();
     if(n){
-      if(d !== null){
-        n.value = (d===true) ? this.fmt(0, 0, n.vTime) : d;
-        if(!(d===true && n.vTime) && h && m) n.value += ' ' + this.n(h.textContent) + ':' + this.n(m.textContent);
-        this.validate(n, 0);
-      }
+      this.setValue(n, d, h, m);
       n.focus();
     }
     d1.setState(this.win, 0);
+  }
+  
+  this.setValue = function(n, d, h, m){
+    if(d !== null){
+      n.value = (d===true) ? this.fmt(0, 0, n.vTime) : d;
+      if(!(d===true && n.vTime) && h && m) n.value += ' ' + this.n(h.textContent) + ':' + this.n(m.textContent);
+      this.validate(n, 0);
+    }
   }
   
   this.n = function(v, l){
@@ -136,8 +141,8 @@ var main = new(function() {
         var ni = this.btn('#next-min', d1.i('next'), p2);
         ph.addEventListener('click', this.setTime.bind(this, ch, -1, 24), false);
         nh.addEventListener('click', this.setTime.bind(this, ch, +1, 24), false);
-        pi.addEventListener('click', this.setTime.bind(this, ci, -1, 60), false);
-        ni.addEventListener('click', this.setTime.bind(this, ci, +1, 60), false);
+        pi.addEventListener('click', this.setTime.bind(this, ci, -this.opt.stepMinutes, 60), false);
+        ni.addEventListener('click', this.setTime.bind(this, ci, +this.opt.stepMinutes, 60), false);
     }
    //buttons
     var y = x.getFullYear();
@@ -191,8 +196,11 @@ var main = new(function() {
   
   this.setTime = function(n, step, max, e){
     e.preventDefault();
-    var v = (parseInt(n.textContent, 10) + step + max) % max;
-    n.textContent = this.n(v);
+    //var v = (parseInt(n.textContent, 10) + step + max) % max;
+    var v = parseInt(n.textContent, 10);
+    var x = v % Math.abs(step);
+    v += x ? (step>0 ? step-x : -x) : max+step;
+    n.textContent = this.n(v % max);
   }
 
   this.parse = function(d){
@@ -229,7 +237,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.46 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.48 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -692,7 +700,10 @@ var main = new(function() {
     if (t && t.tagName) c.appendChild(t);
     else if (t) c.innerHTML = t; //c.appendChild(document.createTextNode(t||''));
     if (attrs) {
-      for (var i in attrs) c[i] = attrs[i];
+      for (var i in attrs) {
+        if(i.match(/-/)) c.setAttribute(i.replace(/^-/, ''), attrs[i]);
+        else c[i] = attrs[i];
+      }
     }
     return n ? (after ? n.parentNode.insertBefore(c, n.nextSibling) : n.appendChild(c)) : c;
   }
@@ -996,6 +1007,10 @@ var main = new(function () {
       z.setAttribute('contenteditable', true);
       z.theArea = n;
       n.theWys = z;
+      if(n.id) {
+        z.id = 'lookup-' + n.id;
+        d1.b('', '[for="' + n.id + '"]', 'click', function(lbl, e) { if(d1.getState(z)) z.focus(); });
+      }
       d1.setState(mm, 0)
       var t = (n.getAttribute('data-tools') || this.opt.tools).split('');
       var to = m, a, b;
@@ -1229,6 +1244,10 @@ main = new(function() {
     n.type = 'hidden';
     n.vLabel = n.getAttribute(this.opt.attrLabel) || n.value || '';//@@
     var m = d1.ins('input', '', {type: 'text', value: n.vLabel, className:'input-lookup'}, pop, this.inPop ? 0 : 1);
+    if(n.id) {
+      m.id = 'lookup-' + n.id;
+      d1.b('', '[for="' + n.id + '"]', '', function(lbl, e) { lbl.htmlFor = m.id; });
+    }
     m.autocomplete = 'off';
     var i = null;
     if(n.getAttribute(this.opt.attrUrl)){
