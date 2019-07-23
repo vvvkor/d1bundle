@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.15 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.16 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance
@@ -71,7 +71,7 @@ this.get=function(h,p){var v=false;if(p){var re=new RegExp("([?&]"+p+"=)([^&]*)"
 //insert
 //after: 0 = appendChild, 1 = siblingAfter;
 this.ins=function(tag,t,attrs,n,after){var c=document.createElement(tag||"span");if(t&&t.tagName)c.appendChild(t);else if(t)c.innerHTML=t;//c.appendChild(document.createTextNode(t||''));
-if(attrs){for(var i in attrs){if(i.match(/-/))c.setAttribute(i.replace(/^-/,""),attrs[i]);else c[i]=attrs[i]}}return n?after?n.parentNode.insertBefore(c,n.nextSibling):n.appendChild(c):c};this.svg=function(i,c,alt){if(!document.getElementById(i))return this.ins("span",alt,{className:c||""});return this.ins("span",'<svg class="'+this.opt.cIcon+" "+(c||"")+'" width="24" height="24"><use xlink:href="#'+i+'"></use></svg>')};this.i=function(s,c){return this.svg(this.ico[s]||"",c||"",this.s("_"+s))}
+if(attrs){for(var i in attrs){if(i.match(/-/))c.setAttribute(i.replace(/^-/,""),attrs[i]);else c[i]=attrs[i]}}return n?after?n.parentNode.insertBefore(c,after<0?n:n.nextSibling):after===false?n.insertBefore(c,n.firstChild):n.appendChild(c):c};this.svg=function(i,c,alt){if(!document.getElementById(i))return this.ins("span",alt,{className:c||""});return this.ins("span",'<svg class="'+this.opt.cIcon+" "+(c||"")+'" width="24" height="24"><use xlink:href="#'+i+'"></use></svg>')};this.i=function(s,c){return this.svg(this.ico[s]||"",c||"",this.s("_"+s))}
 //localization;
 this.getStrings=function(){var d=document.querySelector("["+this.opt.attrStr+"]");if(d){var s=JSON.parse(d.getAttribute(this.opt.attrStr));for(var i in s)this.str[i]=s[i]}};this.s=function(s,def){return this.str[s]||(def===undefined?s:def)}
 //run;
