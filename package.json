@@ -1,6 +1,6 @@
 {
   "name": "d1bundle",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "d1 bundle",
   "main": "dist/d1bundle.js",
   "directories": {
@@ -44,8 +44,8 @@
     "d1dialog": "^1.2.7",
     "d1edit": "^1.2.10",
     "d1gallery": "^1.2.6",
-    "d1lookup": "^1.2.9",
-    "d1tablex": "^1.2.11",
+    "d1lookup": "^1.2.10",
+    "d1tablex": "^1.2.12",
     "d1valid": "^1.0.5",
     "replace-in-file": "^4.1.1",
     "uglify-js": "^3.6.0"

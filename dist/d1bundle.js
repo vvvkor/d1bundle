@@ -1310,7 +1310,7 @@ main = new(function() {
   
   this.build = function(n, d){
     while(this.win.firstChild) this.win.removeChild(this.win.firstChild);
-    var ul = d1.ins('ul', '', {id: this.opt.idList, className: 'nav l'}, this.win);
+    var ul = d1.ins('ul', '', {className: 'nav l'}, this.win);
     var w, a, j = 0;
     for(var i in d){
       w = d1.ins('li', '', {}, ul);
@@ -1414,7 +1414,6 @@ main = new(function() {
     for(i in opt) this.opt[i] = opt[i];
     this.lang = document.documentElement.getAttribute('lang') || 'en';
     this.skipComma = (this.lang=='en');
-    console.log(this.lang);
     var t = document.querySelectorAll(this.opt.qsSort + ', table[' + this.opt.attrFilter + ']');
     //t.forEach(this.prepare.bind(this));
     for (i = 0; i < t.length; i++) this.prepare(t[i]);
