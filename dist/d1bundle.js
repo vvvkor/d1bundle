@@ -50,7 +50,7 @@ var main = new(function() {
     n.type = 'text';
     n.autocomplete = 'off';
     if(n.value) n.value = this.fmt(this.parse(n.value), 0, n.vTime);
-    var pop = d1.ins('div','',{className:'pop wide'},n,1); //''
+    var pop = d1.ins('div','',{className:'pop wide l'},n,1); //''
     pop.appendChild(n);
     var ico = [];
     for(var i in this.opt.icons){
@@ -1251,6 +1251,7 @@ main = new(function() {
     var m = d1.ins('input', '', {type: 'text', value: n.vLabel, className:'input-lookup'}, pop, this.inPop ? 0 : 1);
     if(n.id) {
       m.id = 'lookup-' + n.id;
+      if(n.title) m.title = n.title;
       d1.b('', '[for="' + n.id + '"]', '', function(lbl, e) { lbl.htmlFor = m.id; });
     }
     m.autocomplete = 'off';
