@@ -237,7 +237,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.50 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.51 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -890,7 +890,7 @@ var main = new(function() {
     var ok = d1.ins('a', (n ? n.getAttribute('data-ok') : '') || d1.s('ok'), {href: this.opt.hashOk, className: 'btn pad ' + (warn ? 'bg-e' : 'bg-y')}, p3);
     if (ask) {
       d1.ins('', ' ', {}, p3);
-      d1.ins('a', d1.s('cancel'), {href: this.opt.hashCancel, className: 'btn pad bg-n'}, p3);
+      d1.ins('a', (n ? n.getAttribute('data-cancel') : '') || d1.s('cancel'), {href: this.opt.hashCancel, className: 'btn pad bg-n'}, p3);
     }
     if(inp) inp.addEventListener('keypress', this.dialogConfirm.bind(this, n, inp, ask), false);
     ok.addEventListener('click', this.dialogConfirm.bind(this, n, inp, ask), false);
@@ -1220,6 +1220,7 @@ main = new(function() {
     attrLabel: 'data-label',
     attrLookup: 'data-lookup',
     attrUrl: 'data-url',
+    attrGoto: 'data-goto',
     icon: 'edit',
     idList: 'lookup-list',
     max: 10,
@@ -1254,6 +1255,7 @@ main = new(function() {
       if(n.title) m.title = n.title;
       d1.b('', '[for="' + n.id + '"]', '', function(lbl, e) { lbl.htmlFor = m.id; });
     }
+    if(n.placeholder) m.placeholder = n.placeholder;
     m.autocomplete = 'off';
     var i = null;
     if(n.getAttribute(this.opt.attrUrl)){
@@ -1318,15 +1320,16 @@ main = new(function() {
     while(this.win.firstChild) this.win.removeChild(this.win.firstChild);
     var ul = d1.ins('ul', '', {className: 'nav let'}, this.win);
     var w, a, j = 0;
+    var go = n.getAttribute(this.opt.attrGoto);
     for(var i in d){
       w = d1.ins('li', '', {}, ul);
-      a = d1.ins('a', '', {href: '#' + d[i].id, className: '-pad -hover'}, w);
+      a = d1.ins('a', '', {href: go ? go.replace(/\{id\}/, d[i].id) : '#' + d[i].id, className: '-pad -hover'}, w);
       d1.ins('span', d[i].nm, {}, a);
       if(d[i].info){
         d1.ins('br', '', {}, a);
         d1.ins('small', d[i].info, {className: 'text-n'}, a);
       }
-      a.addEventListener('click', this.choose.bind(this, n, a), false);
+      if(!go) a.addEventListener('click', this.choose.bind(this, n, a), false);
       j++;
       if(j >= this.opt.max) break;
     }
