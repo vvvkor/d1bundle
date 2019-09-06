@@ -237,7 +237,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.51 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.53 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -1243,7 +1243,8 @@ main = new(function() {
 
     var t = document.querySelectorAll('[' + this.opt.attrLookup + ']');
     for (i = 0; i < t.length; i++) this.prepare(t[i]);
-  }
+    d1.b('','[data-chain]','change',this.updateChain.bind(this));
+    d1.b('','[data-chain]','',this.updateChain.bind(this));   }
 
   this.prepare = function(n) {
     var pop = d1.ins('div','',{className:'pop'});
@@ -1386,6 +1387,31 @@ main = new(function() {
     if(n.value.length>0 && u) location.href = u.replace(/\{id\}/, n.value);
   }
 
+  // update chain
+  
+  this.updateChain = function(n,e){
+    var m = d1.q(n.getAttribute('data-chain'),0);
+    if(m){
+      if(!n.value) this.setOptions(m,[]);
+      else{
+        var u = m.getAttribute('data-filter').replace(/\{q\}/,n.value);
+        d1.ajax(u,m,this.onChainData.bind(this));
+      }
+    }
+  }
+  
+  this.onChainData = function(req,n,e){
+    var u = JSON.parse(req.responseText);
+    this.setOptions(n,u.data);
+  }
+
+  this.setOptions = function(n,a){
+    while(n.firstChild) n.removeChild(n.firstChild);
+    var z = n.getAttribute('data-placeholder') || '';
+    if(!a || a.length==0 || z) d1.ins('option',z||'-',{value:0},n);
+    if(a) for(var i=0;i<a.length;i++) d1.ins('option',a[i].nm,{value:a[i].id},n);
+  }
+  
   d1.plug(this);
 
 })();
