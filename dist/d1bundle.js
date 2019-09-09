@@ -237,7 +237,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.53 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.54 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -1224,6 +1224,7 @@ main = new(function() {
     attrLookup: 'data-lookup',
     attrUrl: 'data-url',
     attrGoto: 'data-goto',
+    cacheLimit: 0,
     icon: 'edit',
     idList: 'lookup-list',
     max: 10,
@@ -1285,7 +1286,8 @@ main = new(function() {
       this.seq++;
       n.vSeq = this.seq;
       if(n.vWait) clearTimeout(n.vWait);
-      n.vWait = setTimeout(this.find.bind(this, n), now ? 0 : this.opt.wait);
+      if(n.vCache && n.vCache[n.vCap.value]) this.openList(n, n.vCache[n.vCap.value]);
+      else n.vWait = setTimeout(this.find.bind(this, n), now ? 0 : this.opt.wait);
     }
   }
   
@@ -1296,17 +1298,18 @@ main = new(function() {
         seq: this.seq,
         time: (new Date()).getTime()
     }).replace(/\{q\}/, n.vCap.value);
-    d1.ajax(u, null, this.list.bind(this, this.seq, n));
+    d1.ajax(u, null, this.list.bind(this, n.vCap.value, this.seq, n));
   }
   
-  this.list = function(seq, n, req, nn, e){
+  this.list = function(u, seq, n, req, nn, e){
     var d = JSON.parse(req.responseText);
     if(seq==n.vSeq) this.openList(n, d.data, e);
     //console.log(seq==n.vSeq ? 'use' : 'skip', seq, n.vSeq);
+    this.store(n, u, d);
   }
 
   this.openList = function(n, d, e){
-    e.stopPropagation();
+    if(e) e.stopPropagation();
     this.closeList();
     var pop = this.inPop ? n.previousSibling : n.vCap.previousSibling;
     pop.appendChild(this.win);//.pop
@@ -1395,21 +1398,33 @@ main = new(function() {
       if(!n.value) this.setOptions(m,[]);
       else{
         var u = m.getAttribute('data-filter').replace(/\{q\}/,n.value);
-        d1.ajax(u,m,this.onChainData.bind(this));
+        if(m.vCache && m.vCache[u]) this.setOptions(m,m.vCache[u]);
+        else d1.ajax(u,m,this.onChainData.bind(this,u));
       }
     }
   }
   
-  this.onChainData = function(req,n,e){
-    var u = JSON.parse(req.responseText);
-    this.setOptions(n,u.data);
+  this.onChainData = function(u,req,n,e){
+    var d = JSON.parse(req.responseText);
+    this.setOptions(n,d.data);
+    this.store(n, u, d);
   }
 
   this.setOptions = function(n,a){
     while(n.firstChild) n.removeChild(n.firstChild);
     var z = n.getAttribute('data-placeholder') || '';
-    if(!a || a.length==0 || z) d1.ins('option',z||'-',{value:0},n);
+    if(!a || a.length==0 || z) d1.ins('option',z||'-',{value:''},n);
     if(a) for(var i=0;i<a.length;i++) d1.ins('option',a[i].nm,{value:a[i].id},n);
+  }
+  
+  this.store = function(n,u,d){
+    var c = n.getAttribute('data-cache');
+    if(c===undefined) c = this.opt.cacheLimit;
+    c = parseInt(c, 10);
+    if(c){
+      if(!n.vCache || Object.keys(n.vCache).length>=c) n.vCache = {};
+      if(d) n.vCache[u] = d.data;
+    }
   }
   
   d1.plug(this);
