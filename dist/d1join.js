@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.28 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.29 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance
@@ -6,7 +6,7 @@ if(window&&window.d1){console.log("d1 already included")}else{
 // begin module
 var main=new function(){"use strict";this.name="d1";this.opt={cAct:"act",cAlert:"alert",cClose:"close",cDialog:"dialog",cGallery:"gal",cHide:"hide",cIcon:"icon",cTabs:"tabs",hashCancel:"#cancel",
 //internal
-cToggle:"toggle",cJsControl:"js-control",cJsHide:"js-hide",cHashed:"js-hashed",attrStr:"data-str",qsEsc:".pop>div.toggle, .nav.toggle ul",//, .dlg, .full
+cToggle:"toggle",cJsControl:"js-control",cJsHide:"js-hide",cHashed:"js-hashed",attrStr:"data-str",minDesktop:880,qsEsc:".pop>div.toggle, .nav.toggle ul",//, .dlg, .full
 qsMem:".mem, ul.tabs.mem+div>div, ul.mem ul[id]",qsRehash:"",
 //secondary
 qsJsShow:".js-control:not(.js-hide)"};this.str={cancel:"Cancel",ok:"OK",
@@ -62,7 +62,7 @@ if(!e||e.keyCode==27||e.button===0){
 //escape or click - check ancestor
 this.b("",this.opt.qsEsc,"",e?this.checkHide.bind(this,e.keyCode?null:e.target):this.hide);
 //if(n && n.hash==this.opt.hashCancel) this.hide(this.ancestor(this.opt.qsEsc, n));
-if(location.hash.length>0){var d=this.q(location.hash,0);if(!e||e.keyCode==27||document.body.contains(e.target)&&!this.ancestor(location.hash,e.target))location.hash=this.opt.hashCancel}}};this.checkHide=function(t,n){if(n.matches(this.opt.qsJsShow)){var a=t?this.ancestor("a",t)||t:null;if(t?!n.parentNode.contains(t)&&a.hash!="#"+n.id:!this.q(this.opt.qsJsShow,0,n))this.hide(n)}};this.onHash=function(){if(location.hash){this.show(location.hash);this.updateLinks(1,location.hash.substr(1),1);var d=this.q(location.hash+" [name]",0);if(d)d.focus()}};this.setValue=function(n,e){e.preventDefault();var d=this.q(n.hash,0);if(d){d.value=n.getAttribute("data-value");this.esc()}};this.prepareColor=function(n,e){var m=document.createElement("input");m.type="text";m.value=n.value;m.size=7;m.className="color";n.parentNode.insertBefore(m,n);n.parentNode.insertBefore(document.createTextNode(" "),n);this.b("",[n,m],"input",function(x,e){(x==n?m:n).value=x.value})}
+if(location.hash.length>0){var d=this.q(location.hash,0);if(!e||e.keyCode==27||document.body.contains(e.target)&&!this.ancestor(location.hash,e.target))location.hash=this.opt.hashCancel}}};this.checkHide=function(t,n){if(n.matches(this.opt.qsJsShow)){var a=t?this.ancestor("a",t)||t:null;if(t?!n.parentNode.contains(t)&&a.hash!="#"+n.id:!this.q(this.opt.qsJsShow,0,n))this.hide(n)}};this.onHash=function(){if(location.hash){this.show(location.hash);this.updateLinks(1,location.hash.substr(1),1);var d=this.q(location.hash+" [name]",0);if(d)d.focus()}};this.onResize=function(){var m=window.innerWidth<=this.opt.minDesktop;m?this.b("","[data-class-mobile]","",function(n){n.className=n.getAttribute("data-class-mobile")}):this.b("","[data-class-desktop]","",function(n){n.className=n.getAttribute("data-class-desktop")})};this.setValue=function(n,e){e.preventDefault();var d=this.q(n.hash,0);if(d){d.value=n.getAttribute("data-value");this.esc()}};this.prepareColor=function(n,e){var m=document.createElement("input");m.type="text";m.value=n.value;m.size=7;m.className="color";n.parentNode.insertBefore(m,n);n.parentNode.insertBefore(document.createTextNode(" "),n);this.b("",[n,m],"input",function(x,e){(x==n?m:n).value=x.value})}
 //ajax;
 this.getAjax=function(n,e){e.preventDefault();var qs=n.getAttribute("data-target");this.ajax(n.getAttribute("href"),qs=="#"?true:this.q(qs,0))};this.ajax=function(url,n,callback){if(typeof n==="string"&&n)n=document.querySelector(n);var req=new XMLHttpRequest;if(n||callback)req.addEventListener("load",this.recv.bind(this,req,n,callback));req.open("GET",url);req.send()};this.recv=function(req,n,callback,e){if(req.status=="200"){if(n===true){this.showDialog(req.responseText)}else if(n){n.innerHTML=req.responseText;var dlg=this.ancestor(".dlg, .full",n);if(dlg&&dlg.id)location.hash="#"+dlg.id}if(callback)callback(req,n,e);// JSON.parse(req.responseText)
 }else console.error("XHTTP request failed",req)}
@@ -94,7 +94,7 @@ this.b(n,"."+this.opt.cToggle+"[id]","",this.setState);
 this.restore();
 //prepare hash
 //if (location.hash) this.show(location.hash);
-this.onHash();
+this.onResize();this.onHash();
 //toggle visiblity or class
 this.b(n,"[data-class]","",this.handleState);this.b(n,"a[href^='#'], [data-class]","click",this.handleState);
 //set input value
@@ -108,7 +108,9 @@ if(!n)this.b("","html, a[href='"+this.opt.hashCancel+"']","click",this.esc);//mo
 //[data-target]
 this.b("","a[data-target]","click",this.getAjax);
 //focus dialog
-this.b("",[window],"hashchange",this.onHash)}};
+this.b("",[window],"hashchange",this.onHash);
+//resize
+this.b("",[window],"resize",this.onResize)}};
 // end module
 // var isNode    = (typeof module !== 'undefined' && this.module !== module); // use module or global
 // var isBrowser = (typeof window !== 'undefined' && this.window === this);
