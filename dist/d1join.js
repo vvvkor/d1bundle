@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.30 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.31 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance
@@ -259,7 +259,7 @@ n.style.overflow="auto";n.style.minHeight="3em";n.style.maxHeight=this.opt.heigh
 //n.style.height = 'auto';
 //n.style.height = (24 + n.scrollHeight) + 'px';
 //2. not exact
-n.style.height=1.5*(2+(n.value.match(/\n/g)||[]).length)+"em"};d1.plug(this)};if(typeof module!=="undefined")module.exports=main;else if(window)d1edit=main})();/*! d1valid https://github.com/vvvkor/d1valid */
+n.style.height=1.5*(2+Math.max(n.value.length/50,(n.value.match(/\n/g)||[]).length))+"em"};d1.plug(this)};if(typeof module!=="undefined")module.exports=main;else if(window)d1edit=main})();/*! d1valid https://github.com/vvvkor/d1valid */
 /* Custom form validation */
 /* todo: ajax validate, server validate, .js-process */
 /* todo: required lookup, wysiwyg, min/max date */
