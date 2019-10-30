@@ -61,13 +61,15 @@ var options = {
     next2:  'svg-last'
   },
   // options for plugins
-  calendar: {hashNow: '#today'},
-  dialog: {hashCancel: '#no'},
-  edit: {height: '20vh'},
-  gallery: {hashCancel: '#back'},
-  lookup: {idList: 'autocomplete-list'},
-  tablex: {cFilter: 'bg-i'},
-  valid: {qsValidate: 'form.val'}
+  plug: {
+    calendar: {hashNow: '#today'},
+    dialog: {hashCancel: '#no'},
+    edit: {height: '20vh'},
+    gallery: {hashCancel: '#back'},
+    lookup: {idList: 'autocomplete-list'},
+    tablex: {cFilter: 'bg-i'},
+    valid: {qsValidate: 'form.val'}
+  }
 };
 ```
 
