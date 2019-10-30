@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.33 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.35 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance
@@ -24,13 +24,13 @@ qsJsShow:".js-control:not(.js-hide)"};this.str={cancel:"Cancel",ok:"OK",
     //customError: '',
     */
 //icons
-_close:"&#10005;",//'&#10005;',//'&times;',
-_delete:"&#10005;",_edit:"&rarr;",_now:"&#10003;",//'&bull;',
-_date:"&#9744;",//'&#9744;', '&#10063;', '&#8862;', '&darr;',
+_close:"&#x2715;",//'&times;',
+_delete:"&#x2715;",_edit:"&rarr;",_now:"&#x2713;",//'&bull;',
+_date:"#",//'&#x274f;',//'&darr;',
 _prev:"&lsaquo;",_next:"&rsaquo;",_prev2:"&laquo;",_next2:"&raquo;"};this.ico={};this.noMem=0;this.plugins=[];
 //common
-this.load=function(obj,opt,str,ico,plug){if(!obj)obj=this;this.b("",[document],"DOMContentLoaded",typeof obj==="function"?obj:obj.init.bind(obj,opt,str,ico,plug))};this.loadAll=function(plug){if(!plug)plug={};this.load(this,plug.opt,plug.str,plug.ico,plug)};this.init=function(opt,str,ico,plug){var i;for(i in opt)this.opt[i]=opt[i];for(i in str)this.str[i]=str[i];for(i in ico)this.ico[i]=ico[i];this.opt.qsJsShow="."+this.opt.cJsControl+":not(."+this.opt.cJsHide+")";if(location.hash=="#disable-js")return;if(window&&!Element.prototype.matches)Element.prototype.matches=Element.prototype.msMatchesSelector;//ie9+
-this.getStrings();this.refresh();if(plug)this.initPlugins(plug)};this.plug=function(p){this.plugins.push(p)};this.initPlugins=function(opts){for(var i in this.plugins)this.plugins[i].init(opts?opts[this.plugins[i].name]:{})};this.q=function(s,i,n){if(!s||s.match(/\.\d|[?&]/))return i===undefined?[]:null;var f=i===0?"querySelector":"querySelectorAll";var a=(n||document)[f](s);if(i)a=a[i<0?a.length+i:i];return a};this.b=function(n,sel,type,fn){var a=typeof sel==="string"?(n||document).querySelectorAll(sel):sel;if(a.length)[].forEach.call(a,this.handle.bind(this,type,fn))};this.handle=function(type,fn,n){type?n.addEventListener(type,fn.bind(this,n),false):fn.call(this,n)};this.ancestor=function(q,n){
+this.loadAll=function(cfg){this.load(this,cfg)};this.load=function(obj,cfg){if(!obj)obj=this;this.b("",[document],"DOMContentLoaded",typeof obj==="function"?obj:obj.init.bind(obj,cfg))};this.init=function(cfg){if(!cfg){cfg=document.body.getAttribute("data-d1");if(cfg)cfg=JSON.parse(cfg)}var i;if(cfg){var opt=cfg.opt||cfg;for(i in opt)this.opt[i]=opt[i];for(i in cfg.str)this.str[i]=cfg.str[i];for(i in cfg.ico)this.ico[i]=cfg.ico[i]}this.opt.qsJsShow="."+this.opt.cJsControl+":not(."+this.opt.cJsHide+")";if(location.hash=="#disable-js")return;if(window&&!Element.prototype.matches)Element.prototype.matches=Element.prototype.msMatchesSelector;//ie9+
+this.getStrings();this.refresh();this.initPlugins(cfg?cfg.plug:{})};this.plug=function(p){this.plugins.push(p)};this.initPlugins=function(opts){for(var i in this.plugins)this.plugins[i].init(opts?opts[this.plugins[i].name]:{})};this.q=function(s,i,n){if(!s||s.match(/\.\d|[?&]/))return i===undefined?[]:null;var f=i===0?"querySelector":"querySelectorAll";var a=(n||document)[f](s);if(i)a=a[i<0?a.length+i:i];return a};this.b=function(n,sel,type,fn){var a=typeof sel==="string"?(n||document).querySelectorAll(sel):sel;if(a.length)[].forEach.call(a,this.handle.bind(this,type,fn))};this.handle=function(type,fn,n){type?n.addEventListener(type,fn.bind(this,n),false):fn.call(this,n)};this.ancestor=function(q,n){
 //return n.parentNode.closest(q); //-ie
 do{if(n.matches&&n.matches(q))return n}while(n=n.parentNode)}
 //basic;
@@ -136,11 +136,11 @@ h=d1.arg(h,u);if(n.tagName=="A")n.href=h}};this.alert=function(n,e){if(!this.isD
 return location.hash=="#"+this.win.id};d1.plug(this)};if(typeof module!=="undefined")module.exports=main;else if(window)d1dialog=main})();/*! d1gallery https://github.com/vvvkor/d1gallery */
 /* Lighweight image gallery */
 //.gallery a.pic
-if(typeof module!=="undefined")var d1=require("d1css");(function(){var main=new function(){"use strict";this.name="gallery";this.opt={hashCancel:"#cancel",idPrefix:"pic",num:true,qsGallery:".gallery",qsLinks:"a.pic"};this.seq=0;this.init=function(opt){var i;for(i in opt)this.opt[i]=opt[i];d1.b("",this.opt.qsGallery,"",this.prepare.bind(this));d1.b("",[window],"keydown",this.key.bind(this));d1.b("",[window],"hashchange",this.loadTarget.bind(this));if(location.hash)this.loadTarget()};this.loadTarget=function(){var n=d1.q(location.hash,0);if(n){this.loadImg(n);this.loadImg(d1.q(n.hash,0))}};this.loadImg=function(n){if(n&&n.vImg){n.style.backgroundImage='url("'+n.vImg+'")';n.vImg=""}};this.prepare=function(n){var g=d1.ins("div","",{className:d1.opt.cGallery});var a=n.querySelectorAll(this.opt.qsLinks);var z=a.length;for(var i=0;i<z;i++){this.seq++;var p=d1.ins("a","",{id:this.opt.idPrefix+this.seq,href:"#"+this.opt.idPrefix+(this.seq+1-(i==z-1?z:0))},g);
+if(typeof module!=="undefined")var d1=require("d1css");(function(){var main=new function(){"use strict";this.name="gallery";this.opt={hashCancel:"#cancel",idPrefix:"pic",num:true,qsGallery:".gallery",qsLinks:"a.pic"};this.seq=0;this.init=function(opt){var i;for(i in opt)this.opt[i]=opt[i];d1.b("",this.opt.qsGallery,"",this.prepare.bind(this));d1.b("",[window],"keydown",this.key.bind(this));d1.b("",[window],"hashchange",this.loadTarget.bind(this));if(location.hash)this.loadTarget()};this.loadTarget=function(){var n=d1.q(location.hash,0);if(n){this.loadImg(n);this.loadImg(d1.q(n.hash,0))}};this.loadImg=function(n){if(n&&n.vImg){n.style.backgroundImage='url("'+n.vImg+'")';n.vImg=""}};this.prepare=function(n){var g=d1.ins("div","",{className:d1.opt.cGallery});var a=n.querySelectorAll(this.opt.qsLinks);var z=a.length;for(var i=0;i<z;i++)if(!a[i].vDone){this.seq++;var p=d1.ins("a","",{id:this.opt.idPrefix+this.seq,href:"#"+this.opt.idPrefix+(this.seq+1-(i==z-1?z:0))},g);
 //p.style.setProperty('--img', 'url("' + a[i].getAttribute('href') + '")');
 //p.style.backgroundImage = 'url("' + a[i].getAttribute('href') + '")';//preload all
 p.vImg=a[i].getAttribute("href");//preload prev & next
-p.setAttribute("data-info",(this.opt.num?i+1+"/"+z+(a[i].title?" - ":""):"")+(a[i].title||""));a[i].href="#"+p.id}d1.ins("a",d1.i("close"),{href:this.opt.hashCancel,className:d1.opt.cClose},g);d1.b(g,"a[id]","click",d1.gotoPrev);document.querySelector("body").appendChild(g)};this.key=function(n,e){if(location.hash){var a=document.getElementById(location.hash.substr(1));if(a&&a.hash){var k=e.keyCode;if(k==37||k==38)d1.gotoPrev(a);if(k==39||k==40)location.hash=a.hash;//a.click();
+p.setAttribute("data-info",(this.opt.num?i+1+"/"+z+(a[i].title?" - ":""):"")+(a[i].title||""));a[i].href="#"+p.id;a[i].vDone=1}d1.ins("a",d1.i("close"),{href:this.opt.hashCancel,className:d1.opt.cClose},g);d1.b(g,"a[id]","click",d1.gotoPrev);document.querySelector("body").appendChild(g)};this.key=function(n,e){if(location.hash){var a=document.getElementById(location.hash.substr(1));if(a&&a.hash){var k=e.keyCode;if(k==37||k==38)d1.gotoPrev(a);if(k==39||k==40)location.hash=a.hash;//a.click();
 }}};d1.plug(this)};if(typeof module!=="undefined")module.exports=main;else if(window)d1gallery=main})();/*! d1tablex https://github.com/vvvkor/d1tablex */
 /* Filter and sort HTML table */
 //table.sort[data-filter][data-filter-report][data-case][data-filter-cols]

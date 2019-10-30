@@ -261,7 +261,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.62 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.66 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -324,11 +324,11 @@ var main = new(function() {
     //customError: '',
     */
     //icons
-    _close: '&#10005;',//'&#10005;',//'&times;',
-    _delete: '&#10005;',
+    _close: '&#x2715;',//'&times;',
+    _delete: '&#x2715;',
     _edit: '&rarr;',
-    _now: '&#10003;',//'&bull;',
-    _date: '&#9744;',//'&#9744;', '&#10063;', '&#8862;', '&darr;',
+    _now: '&#x2713;',//'&bull;',
+    _date: '#', //'&#x274f;',//'&darr;',
     _prev: '&lsaquo;',
     _next: '&rsaquo;',
     _prev2: '&laquo;',
@@ -343,28 +343,34 @@ var main = new(function() {
   
   //common
 
-  this.load = function(obj, opt, str, ico, plug) {
+  this.loadAll = function(cfg){
+    this.load(this, cfg);
+  }
+  
+  this.load = function(obj, cfg) {
     if (!obj) obj = this;
-    this.b("", [document], "DOMContentLoaded", typeof obj === "function" ? obj : obj.init.bind(obj, opt, str, ico, plug));
+    this.b("", [document], "DOMContentLoaded", typeof obj === "function" ? obj : obj.init.bind(obj, cfg));
   }
-  
-  this.loadAll = function(plug){
-    if(!plug) plug = {};
-    this.load(this, plug.opt, plug.str, plug.ico, plug);
-  }
-  
-  this.init = function(opt, str, ico, plug) {
+ 
+  this.init = function(cfg) {
+    if(!cfg){
+      cfg = document.body.getAttribute('data-d1');
+      if(cfg) cfg = JSON.parse(cfg);
+    }
     var i;
-    for (i in opt) this.opt[i] = opt[i];
-    for (i in str) this.str[i] = str[i];
-    for (i in ico) this.ico[i] = ico[i];
+    if(cfg){
+      var opt = cfg.opt || cfg;
+      for (i in opt) this.opt[i] = opt[i];
+      for (i in cfg.str) this.str[i] = cfg.str[i];
+      for (i in cfg.ico) this.ico[i] = cfg.ico[i];
+    }
     this.opt.qsJsShow = '.' + this.opt.cJsControl + ':not(.' + this.opt.cJsHide + ')';
     
     if (location.hash == "#disable-js") return;
     if (window && !Element.prototype.matches) Element.prototype.matches = Element.prototype.msMatchesSelector; //ie9+
     this.getStrings();
     this.refresh();
-    if(plug) this.initPlugins(plug);
+    this.initPlugins(cfg ? cfg.plug : {});
   }
   
   this.plug = function(p) {
@@ -1215,7 +1221,7 @@ var main = new(function () {
     var g = d1.ins('div', '', {className: d1.opt.cGallery});
     var a = n.querySelectorAll(this.opt.qsLinks);
     var z = a.length;
-    for(var i=0; i<z; i++) {
+    for(var i=0; i<z; i++) if(!a[i].vDone) {
       this.seq++;
       var p = d1.ins('a', '', {
           id: this.opt.idPrefix + this.seq,
@@ -1226,6 +1232,7 @@ var main = new(function () {
       p.vImg = a[i].getAttribute('href');//preload prev & next
       p.setAttribute('data-info', (this.opt.num ? (i+1)+'/'+z+(a[i].title ? ' - ' : '') : '') + (a[i].title || ''));
       a[i].href = '#' + p.id;
+      a[i].vDone = 1;
     }
     d1.ins('a', d1.i('close'), {href: this.opt.hashCancel, className: d1.opt.cClose}, g);
     d1.b(g, 'a[id]', 'click', d1.gotoPrev);
