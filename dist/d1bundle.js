@@ -264,7 +264,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.67 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.68 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -1232,6 +1232,7 @@ var main = new(function () {
           }, g);
       //p.style.setProperty('--img', 'url("' + a[i].getAttribute('href') + '")');
       //p.style.backgroundImage = 'url("' + a[i].getAttribute('href') + '")';//preload all
+      p.vLink = a[i].getAttribute('href');//real link
       p.vImg = a[i].getAttribute('href');//preload prev & next
       p.setAttribute('data-info', (this.opt.num ? (i+1)+'/'+z+(a[i].title ? ' - ' : '') : '') + (a[i].title || ''));
       a[i].href = '#' + p.id;
@@ -1248,7 +1249,8 @@ var main = new(function () {
       if(a && a.hash){
         var k = e.keyCode;
         if (k==37 || k==38) d1.gotoPrev(a);
-        if (k==39 || k==40) location.hash = a.hash;//a.click();
+        else if (k==39 || k==40) location.hash = a.hash;//a.click();
+        else if(k==8 && a.vLink) location.href = a.vLink;
       }
     }
   }
@@ -1310,7 +1312,10 @@ main = new(function() {
     n.vLabel = n.getAttribute(this.opt.attrLabel) || n.value || '';//@@
     var m = d1.ins('input', '', {type: 'text', value: n.vLabel, className:'input-lookup'}, pop, this.inPop ? 0 : 1);
     if(n.id) {
+      m.required = n.required;
+      n.required = false;
       m.id = 'lookup-' + n.id;
+      m.name = 'lookup-' + n.name;
       if(n.title) m.title = n.title;
       d1.b('', '[for="' + n.id + '"]', '', function(lbl, e) { lbl.htmlFor = m.id; });
     }
@@ -1352,6 +1357,7 @@ main = new(function() {
         seq: this.seq,
         time: (new Date()).getTime()
     }).replace(/\{q\}/, n.vCap.value);
+    n.vCur = null;
     d1.ajax(u, null, this.list.bind(this, n.vCap.value, this.seq, n));
   }
   
@@ -1419,6 +1425,7 @@ main = new(function() {
   }
   
   this.fix = function(n, v, c){
+    n.vCur = null;
     n.vSeq = 0;
     if(n.vWait) clearTimeout(n.vWait);
     n.value = v;
@@ -1433,9 +1440,9 @@ main = new(function() {
     else if(e.keyCode == 38 || e.keyCode == 40) this.hiliteNext(n, e.keyCode == 38);
     //else if(e.keyCode == 13) this.choose(n, n.vCur);
     else if(e.keyCode == 13 && n.vCur){
-			if(d1.getState(this.win)) e.preventDefault();
-			n.vCur.click();
-		}
+      if(d1.getState(this.win)) e.preventDefault();
+      n.vCur.click();
+    }
   }
   
   this.go = function(n, e){
