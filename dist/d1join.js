@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.40 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.41 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance
@@ -281,34 +281,12 @@ this.storeSize(n)};this.storeSize=function(n){n.theH=n.clientHeight;n.theW=n.cli
 var a=n.value.split(/\n/).map(function(v){return Math.ceil(10*(1+v.length)/(n.clientWidth||500))}).reduce(function(v,r){return r+v});n.style.height=Math.min(1.5*(2+a),parseFloat(this.opt.height))+"em";this.storeSize(n)};d1.plug(this)};if(typeof module!=="undefined")module.exports=main;else if(window)d1edit=main})();/*! d1valid https://github.com/vvvkor/d1valid */
 /* Custom form validation */
 /* todo: ajax validate, server validate, .js-process */
-/* todo: required lookup, wysiwyg, min/max date */
 //form, form.js-validate, input[data-hint]~.small
 if(typeof module!=="undefined")var d1=require("d1css");(function(){var main=new function(){"use strict";this.name="valid";this.opt={qsValidate:"form",// set custom text for browser tooltips
-cUnhint:"js-unhint"};
-/*
-  this.validationErrors = [
-    'valueMissing',
-    'typeMismatch',
-    'tooLong',
-    'tooShort',
-    'patternMismatch',
-    'rangeUnderflow',
-    'rangeOverflow',
-    'stepMismatch',
-    'badInput',
-    'customError'
-    //,'valid'
-  ];
-  */this.init=function(opt){var i;for(i in opt)this.opt[i]=opt[i];var q=this.opt.qsValidate;d1.b("",q+" input, "+q+" textarea, "+q+" select","",this.initInput.bind(this));d1.b("","form."+this.opt.cUnhint,"",this.unhint.bind(this));d1.b("","form."+this.opt.cUnhint,"submit",this.validateForm.bind(this))};this.initInput=function(n){if(n.willValidate){if(n.tagName=="select"||n.type=="radio"||n.type=="checkbox")n.onchange=this.validateInput.bind(this,n);else n.oninput=this.validateInput.bind(this,n);n.oninvalid=this.setCustomMessage.bind(this,n)}};this.validateInput=function(n){if(n.type=="radio")d1.b(n.form,'[name="'+n.name+'"]',"",function(m){m.setCustomValidity("")});else n.setCustomValidity("");n.checkValidity()};this.setCustomMessage=function(n){var t=n.getAttribute("data-hint")||"";// || n.title;
-t=t.replace(/%([\w\-]+)%/g,function(m,v){return n.getAttribute(v)});n.setCustomValidity(t);
-/*
-    var x = '', err = '', i = 0;
-    while (!x && (err=this.validationErrors[i++])){
-      if(n.validity[err]) x = d1.s(err + ('_' + (n.type || n.tagName.toLowerCase() || '')), '') || d1.s(err,'');
-    }
-    if (x) {
-      x = x.replace(/%(\w+)%/g, function(m,v){ return n.getAttribute(v); });
-      if (n.title.length > 0) x += " \n" + n.title;
-    }
-    n.setCustomValidity(x);
-    */};this.unhint=function(n,e){n.setAttribute("novalidate",true)};this.validateForm=function(n,e){n.classList.remove(this.opt.cUnhint);if(n.checkValidity()===false){e.preventDefault();e.stopPropagation();var f=d1.q(":invalid",0,n);if(f)f.focus()}};d1.plug(this)};if(typeof module!=="undefined")module.exports=main;else if(window)d1valid=main})();
+cUnhint:"js-unhint",// turn off browser tooltips
+cLiveVal:"js-live-val"};this.init=function(opt){var i;for(i in opt)this.opt[i]=opt[i];var q=this.opt.qsValidate;d1.b("",q+" input, "+q+" textarea, "+q+" select","",this.initInput.bind(this));d1.b("","form."+this.opt.cUnhint,"",this.unhint.bind(this));d1.b("","form."+this.opt.cLiveVal,"",this.validateForm.bind(this));d1.b("","form."+this.opt.cUnhint,"submit",this.validateForm.bind(this))};this.initInput=function(n){if(n.willValidate){if(n.tagName=="select"||n.type=="radio"||n.type=="checkbox")n.onchange=this.validateInput.bind(this,n);else n.oninput=this.validateInput.bind(this,n);n.oninvalid=this.setCustomMessage.bind(this,n)}};this.isLive=function(f){return f&&f.classList.contains(this.opt.cLiveVal)};this.validateInput=function(n){if(n.type=="radio")d1.b(n.form,'[name="'+n.name+'"]',"",function(m){m.setCustomValidity("")});else n.setCustomValidity("");n.checkValidity();if(this.isLive(n.form))this.validateForm(n.form)};this.setCustomMessage=function(n){var t=n.getAttribute("data-hint")||"";// || n.title;
+t=t.replace(/%([\w\-]+)%/g,function(m,v){return n.getAttribute(v)});n.setCustomValidity(t)};this.unhint=function(n,e){n.setAttribute("novalidate",true)};this.validateForm=function(n,e){if(e)n.classList.remove(this.opt.cUnhint);var ok=n.checkValidity();//!==false
+if(!ok&&e){e.preventDefault();e.stopPropagation();var f=d1.q(":invalid",0,n);if(f)f.focus()}
+//d1.b(n, '[type="submit"]', '', function(m){ m.disabled = !ok; });//if no cUnhint
+if(this.isLive(n))d1.b(n,'[type="submit"]',"",function(m){m.classList[ok?"remove":"add"]("bg-n")});//if cUnhint used
+};d1.plug(this)};if(typeof module!=="undefined")module.exports=main;else if(window)d1valid=main})();
