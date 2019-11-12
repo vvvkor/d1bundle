@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.39 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.40 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance
@@ -259,15 +259,9 @@ d:["formatblock","<div>","D","Div"],q:["formatblock","<blockquote>","&#8220;","B
     'F': ['fontName','~','FN','Font name','serif'],
     'L': ['inserthtml','<div class="pad bg left">^</div>','FL','Float left'],
     'R': ['inserthtml','<div class="pad bg right">^</div>','FR','Float right']
-    */};this.init=function(opt){var i;for(i in opt)this.opt[i]=opt[i];d1.b("",this.opt.qsEdit,"",this.prepare.bind(this));d1.b("",this.opt.qsAdjust,"",this.setStyle.bind(this));d1.b("",this.opt.qsAdjust,"",this.adjust.bind(this));d1.b("",this.opt.qsAdjust,"input",this.adjust.bind(this));d1.b("",this.opt.qsAdjust,"mouseup",this.resized.bind(this));d1.b("",[window],"resize",d1.b.bind(d1,"",this.opt.qsAdjust,"",this.adjust.bind(this)))};this.prepare=function(n){if(!n.theWys){
-//      var d = d1.ins('div', '', {className: ''});
-var m=d1.ins("nav","",{className:"bg"},/*d*/n,-1);var mm=d1.ins("div");var z=d1.ins("div","",{className:d1.opt.cHide+" bord pad"},/*d*/n,1);z.setAttribute("contenteditable",true);z.theArea=n;z.theNav=m;n.theWys=z;if(n.id){z.id="lookup-"+n.id;d1.b("",'[for="'+n.id+'"]',"click",function(lbl,e){if(d1.getState(z))z.focus()})}d1.setState(mm,0);var t=(n.getAttribute("data-tools")||this.opt.tools).split("");var to=m,a,b;for(var i in t){b=this.btn[t[i]];a=d1.ins("a",b[2],{href:"#cmd-"+b[0]/*i*/,title:b[3],className:"pad hover"},to);if(b[0]=="tools")to=mm;a.onclick=this.cmd.bind(this,z,b,a)}m.appendChild(mm);
+    */};this.init=function(opt){var i;for(i in opt)this.opt[i]=opt[i];d1.b("",this.opt.qsEdit,"",this.prepare.bind(this));d1.b("",this.opt.qsAdjust,"",this.setStyle.bind(this));d1.b("",this.opt.qsAdjust,"",this.adjust.bind(this));d1.b("",this.opt.qsAdjust,"input",this.adjust.bind(this));d1.b("",this.opt.qsAdjust,"mouseup",this.resized.bind(this));d1.b("",[window],"resize",d1.b.bind(d1,"",this.opt.qsAdjust,"",this.adjust.bind(this)))};this.prepare=function(n){if(!n.theWys){var m=d1.ins("nav","",{className:"bg"},/*d*/n,-1);var mm=d1.ins("div");var zc=d1.ins("div","",{className:"js-subinput"},n,1);var z=d1.ins("div","",{className:d1.opt.cHide+" bord pad"},zc);z.setAttribute("contenteditable",true);z.theArea=n;z.theNav=m;n.theWys=z;if(n.id){z.id="lookup-"+n.id;d1.b("",'[for="'+n.id+'"]',"click",function(lbl,e){if(d1.getState(z))z.focus()})}d1.setState(mm,0);var t=(n.getAttribute("data-tools")||this.opt.tools).split("");var to=m,a,b;for(var i in t){b=this.btn[t[i]];a=d1.ins("a",b[2],{href:"#cmd-"+b[0]/*i*/,title:b[3],className:"pad hover"},to);if(b[0]=="tools")to=mm;a.onclick=this.cmd.bind(this,z,b,a)}m.appendChild(mm);
 //d1.b(m, 'a', 'click', this.cmd.bind(this, z));
-n.className+=" bord pad";n.style.width="100%";this.setStyle(n);this.setStyle(z);var l=d1.ancestor("label",n)||n;
-//l.parentNode.insertBefore(d, l.nextSibling);
-//d.insertBefore(n, z);
-////d.appendChild(n);
-d1.b("",[z],"blur",this.up.bind(this,0));d1.b("",[z],"input",this.up.bind(this,0));//for validation
+n.className+=" bord pad";n.style.width="100%";this.setStyle(n);this.setStyle(z);var l=d1.ancestor("label",n)||n;d1.b("",[z],"blur",this.up.bind(this,0));d1.b("",[z],"input",this.up.bind(this,0));//for validation
 //d1.b('', [n], 'input', this.adjust.bind(this));
 }this.up(1,n.theWys);this.modeAuto(n)};this.modeAuto=function(n){var t=(n.getAttribute("data-tools")||this.opt.tools).split("");var wys=n.getAttribute("data-wys");if(wys===null)wys=t.indexOf("/")==-1||n.value.match(/(>|&\w+;)/)&&!n.value.match(/<script/i);this.mode(n.theWys,wys)};this.cmd=function(z,b,n,e){if(e)e.preventDefault();
 //var b = this.btn[n.hash.substr(4)];

@@ -267,7 +267,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.70 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.71 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -1060,10 +1060,10 @@ var main = new(function () {
 
   this.prepare = function (n) {
     if(!n.theWys){
-//      var d = d1.ins('div', '', {className: ''});
       var m = d1.ins('nav', '', {className: 'bg'}, /*d*/ n, -1);
       var mm = d1.ins('div');
-      var z = d1.ins('div', '', {className: d1.opt.cHide + ' bord pad'}, /*d*/ n, 1);
+      var zc = d1.ins('div', '', {className:'js-subinput'}, n, 1)
+      var z = d1.ins('div', '', {className: d1.opt.cHide + ' bord pad'}, zc);
       z.setAttribute('contenteditable', true);
       z.theArea = n;
       z.theNav = m;
@@ -1088,9 +1088,6 @@ var main = new(function () {
       this.setStyle(n);
       this.setStyle(z);
       var l = d1.ancestor('label', n) || n;
-      //l.parentNode.insertBefore(d, l.nextSibling);
-      //d.insertBefore(n, z);
-      ////d.appendChild(n);
       d1.b('', [z], 'blur', this.up.bind(this, 0));
       d1.b('', [z], 'input', this.up.bind(this, 0));//for validation
       //d1.b('', [n], 'input', this.adjust.bind(this));
