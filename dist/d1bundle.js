@@ -59,7 +59,7 @@ var main = new(function() {
       }
       if(on){
         this.win.className = m ? 'dlg hide pad' : 'toggle pad';
-        (m ? document.body : n.parentNode).appendChild(this.win);
+        (m ? document.body : n.thePop).appendChild(this.win);
       }
     }
     d1.setState(this.win, on);
@@ -70,12 +70,15 @@ var main = new(function() {
     n.type = 'text';
     n.autocomplete = 'off';
     if(n.value) n.value = this.fmt(this.parse(n.value), 0, n.vTime);
-    var pop = d1.ins('div','',{className:'pop wide l'},n,1); //''
-    pop.appendChild(n);
+    var pop = d1.ins('div','',{className:'pop wide l'}, n, -1); //''
+    pop.style.verticalAlign = 'bottom';
+    //pop.appendChild(n);
+    n.thePop = pop;
     var ico = [];
+    var ic = d1.ins('span', '', {}, n, 1);//icons container
     for(var i in this.opt.icons){
-      d1.ins('', ' ', {}, pop);
-      var ii = pop.appendChild(d1.i(this.opt.icons[i]));
+      d1.ins('', ' ', {}, ic);
+      var ii = ic.appendChild(d1.i(this.opt.icons[i]));
       ii.style.cursor = 'pointer';
       ico.push(ii);
     }
@@ -264,7 +267,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.68 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.69 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -993,7 +996,7 @@ var main = new(function () {
   this.opt = {
     qsAdjust: 'textarea.adjust',
     qsEdit: 'textarea.edit',
-    height: '50vh',
+    height: 30,//em
     tools: '/*@xbi_.#123p|c,s^vdqf~T(=)j+-'
   };
   
@@ -1051,17 +1054,19 @@ var main = new(function () {
     d1.b('', this.opt.qsAdjust, '', this.setStyle.bind(this));
     d1.b('', this.opt.qsAdjust, '', this.adjust.bind(this));
     d1.b('', this.opt.qsAdjust, 'input', this.adjust.bind(this));
+    d1.b('', this.opt.qsAdjust, 'mouseup', this.resized.bind(this));
     d1.b('', [window], 'resize', d1.b.bind(d1, '', this.opt.qsAdjust, '', this.adjust.bind(this)));
   }
 
   this.prepare = function (n) {
     if(!n.theWys){
-      var d = d1.ins('div', '', {className: ''});
-      var m = d1.ins('nav', '', {className: 'bg'}, d);
+//      var d = d1.ins('div', '', {className: ''});
+      var m = d1.ins('nav', '', {className: 'bg'}, /*d*/ n, -1);
       var mm = d1.ins('div');
-      var z = d1.ins('div', '', {className: d1.opt.cHide + ' bord pad'}, d);
+      var z = d1.ins('div', '', {className: d1.opt.cHide + ' bord pad'}, /*d*/ n, 1);
       z.setAttribute('contenteditable', true);
       z.theArea = n;
+      z.theNav = m;
       n.theWys = z;
       if(n.id) {
         z.id = 'lookup-' + n.id;
@@ -1083,9 +1088,11 @@ var main = new(function () {
       this.setStyle(n);
       this.setStyle(z);
       var l = d1.ancestor('label', n) || n;
-      l.parentNode.insertBefore(d, l.nextSibling);
-      d.appendChild(n);
+      //l.parentNode.insertBefore(d, l.nextSibling);
+      //d.insertBefore(n, z);
+      ////d.appendChild(n);
       d1.b('', [z], 'blur', this.up.bind(this, 0));
+      d1.b('', [z], 'input', this.up.bind(this, 0));//for validation
       //d1.b('', [n], 'input', this.adjust.bind(this));
     }
     this.up(1, n.theWys);
@@ -1127,9 +1134,9 @@ var main = new(function () {
   this.up = function (w, z) {
     if (w) z.innerHTML = z.theArea.value;
     else z.theArea.value = z.innerHTML.
-    replace(/(\shref=")!/ig, ' target="_blank"$1').
-    replace(/(\ssrc="[^"]+#[a-z]*)(\d+%?)"/ig, ' width="$2"$1"');
-    //.replace(/(\ssrc="[^"]+)#([lrc])"/ig,' class="$2"$1"');
+      replace(/(\shref=")!/ig, ' target="_blank"$1').
+      replace(/(\ssrc="[^"]+#[a-z]*)(\d+%?)"/ig, ' width="$2"$1"');
+      //.replace(/(\ssrc="[^"]+)#([lrc])"/ig,' class="$2"$1"');
     if(!w && (typeof(Event) === 'function')) z.theArea.dispatchEvent(new Event('input'));//-ie
   }
 
@@ -1141,19 +1148,32 @@ var main = new(function () {
       else this.adjust(z.theArea);
     }
     this.up(w, z);
-    d1.b(z.previousSibling, 'a', '', function (n) {
+    d1.b(z.theNav, 'a', '', function (n) {
       if(n.hash != '#cmd-src') d1.setState(n, w);
     });
+    z.theArea.theManual = 0;
+    z.theArea.style.width = '100%';
   }
 
   this.setStyle = function(n){
-    n.style.resize = 'vertical'; //both
+    //n.style.resize = 'vertical'; //both
     n.style.overflow = 'auto';
     n.style.minHeight = '3em';
-    n.style.maxHeight = this.opt.height;
+    n.style.maxHeight = '80vh';//n.type ? '80vh' : this.opt.height + 'em';
+    this.storeSize(n);
+  }
+  
+  this.storeSize = function(n){
+    n.theH = n.clientHeight;
+    n.theW = n.clientWidth;
+  }
+  
+  this.resized = function(n){
+    if(n.theH !== n.clientHeight || n.theW !== n.clientWidth) n.theManual = 1;
   }
   
   this.adjust = function(n){
+    if(n.theManual) return;
     //1. jumps
     //n.style.height = 'auto';
     //n.style.height = (24 + n.scrollHeight) + 'px';
@@ -1161,9 +1181,10 @@ var main = new(function () {
     //n.style.height = (1.5 * (2 + Math.max(n.value.length/50, (n.value.match(/\n/g) || []).length))) + 'em';
     //3. better
     var a = n.value.split(/\n/)
-      .map(function(v){ return Math.ceil(10 * (1 + v.length) / n.clientWidth); })
+      .map(function(v){ return Math.ceil(10 * (1 + v.length) / (n.clientWidth || 500)); })
       .reduce(function(v, r){ return r + v; });
-    n.style.height = (1.5 * (2 + a)) + 'em';
+    n.style.height = Math.min(1.5 * (2 + a), parseFloat(this.opt.height)) + 'em';
+    this.storeSize(n);
   }
 
   d1.plug(this);
@@ -1308,14 +1329,15 @@ main = new(function() {
     n.parentNode.insertBefore(pop, n);
     if(!this.inPop) pop.style.verticalAlign = 'bottom';
     n.classList.add('bg-n');
-    n.type = 'hidden';
+    n.classList.add('hide');
+    //n.type = 'hidden';
     n.vLabel = n.getAttribute(this.opt.attrLabel) || n.value || '';//@@
     var m = d1.ins('input', '', {type: 'text', value: n.vLabel, className:'input-lookup'}, pop, this.inPop ? 0 : 1);
+    m.name = 'lookup-' + n.name;
+    m.required = n.required;
+    //n.required = false;
     if(n.id) {
-      m.required = n.required;
-      n.required = false;
       m.id = 'lookup-' + n.id;
-      m.name = 'lookup-' + n.name;
       if(n.title) m.title = n.title;
       d1.b('', '[for="' + n.id + '"]', '', function(lbl, e) { lbl.htmlFor = m.id; });
     }
