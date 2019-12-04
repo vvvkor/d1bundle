@@ -89,6 +89,10 @@ var main = new(function() {
   
   this.switchMonth = function(n, y, m, d, ch, ci, e){
     e.preventDefault();
+    if(d>28){
+      var days = (new Date(y, m+1, 0)).getDate();//days in month
+      d = Math.min(d, days);
+    }
     var h = ch ? parseInt(ch.textContent, 10) : 0;
     var i = ci ? parseInt(ci.textContent, 10) : 0;
     this.openDialog(n, new Date(y, m, d, h, i), e);
@@ -267,7 +271,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.74 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.75 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -1825,7 +1829,8 @@ var main = new(function () {
     var i;
     for (i in opt) this.opt[i] = opt[i];
     var q = this.opt.qsValidate;
-    d1.b('', q + " input, " + q + " textarea, "+ q +" select", "", this.initInput.bind(this));
+    var dh = "[data-hint]";
+    d1.b('', q + " input" + dh + ", " + q + " textarea" + dh + ", "+ q +" select" + dh, "", this.initInput.bind(this));
     d1.b('', "form."+this.opt.cUnhint, "", this.unhint.bind(this));
     d1.b('', "form."+this.opt.cLiveVal, "", this.validateForm.bind(this));
     d1.b('', "form."+this.opt.cUnhint, "submit", this.validateForm.bind(this));
@@ -1857,7 +1862,7 @@ var main = new(function () {
   }
   
   this.unhint = function(n, e) {
-    n.setAttribute('novalidate',true);
+    n.setAttribute('novalidate', true);
   }
   
   this.validateForm = function(n, e) {
