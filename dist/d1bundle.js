@@ -22,7 +22,8 @@ var main = new(function() {
     qsCalendar: 'input.calendar',
     showModal: 0,
     sizeLimit: 801,
-    stepMinutes: 1
+    stepMinutes: 1,
+    inPop: 0
   };
 
   this.win = null;
@@ -70,10 +71,11 @@ var main = new(function() {
     n.type = 'text';
     n.autocomplete = 'off';
     if(n.value) n.value = this.fmt(this.parse(n.value), 0, n.vTime);
-    var pop = d1.ins('div','',{className:'pop wide l'}, n, -1); //''
-    pop.style.verticalAlign = 'bottom';
+    var pop = d1.ins('div','',{className:'pop l'}, n, -1); //''
+    if(!this.opt.inPop) pop.style.verticalAlign = 'bottom';
     //pop.appendChild(n);
     n.thePop = pop;
+    if(this.opt.inPop) pop.appendChild(n);
     var ico = [];
     var ic = d1.ins('span', '', {}, n, 1);//icons container
     for(var i in this.opt.icons){
@@ -1306,12 +1308,12 @@ main = new(function() {
     icon: 'edit',
     idList: 'lookup-list',
     max: 10,
-    wait: 300
+    wait: 300,
+    inPop: 0
   };
   
   this.seq = 0;
   this.win = null;
-  this.inPop = 0;
 
   this.init = function(opt) {
     var i;
@@ -1326,15 +1328,15 @@ main = new(function() {
     d1.b('','[data-chain]','',this.updateChain.bind(this));   }
 
   this.prepare = function(n) {
-    var pop = d1.ins('div','',{className:'pop'});
+    var pop = d1.ins('div','',{className:'pop l'});
     n.parentNode.insertBefore(pop, n);
-    if(!this.inPop) pop.style.verticalAlign = 'bottom';
+    if(!this.opt.inPop) pop.style.verticalAlign = 'bottom';
     n.thePop = pop;
     n.classList.add('bg-n');
     n.classList.add('hide');
     //n.type = 'hidden';
     n.vLabel = n.getAttribute(this.opt.attrLabel) || n.value || '';//@@
-    var mc = this.inPop ? pop : d1.ins('span', '', {className:'js-subinput'}, n, 1);
+    var mc = this.opt.inPop ? pop : d1.ins('span', '', {className:'js-subinput'}, n, 1);
     var m = d1.ins('input', '', {type: 'text', value: n.vLabel, className:'input-lookup'}, mc);
     m.name = 'lookup-' + n.name;
     //m.required = n.required;
@@ -1399,7 +1401,7 @@ main = new(function() {
     var pop = n.thePop;
     pop.appendChild(this.win);//.pop
     d1.setState(this.win, 1);
-    //this.win.style.top = (this.inPop ? (n.vCap.offsetTop + n.vCap.offsetHeight) : pop.offsetHeight) + 'px';
+    //this.win.style.top = (this.opt.inPop ? (n.vCap.offsetTop + n.vCap.offsetHeight) : pop.offsetHeight) + 'px';
     //this.win.style.left = '0';
     this.build(n, d);
   }
