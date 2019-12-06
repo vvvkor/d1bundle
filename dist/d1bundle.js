@@ -16,7 +16,7 @@ var main = new(function() {
     dateFormat: 'd', //y=Y-m-d, d=d.m.Y, m=m/d Y
     hashCancel: '#cancel',
     hashNow: '#now',
-    icons: ['date', 'now', 'delete'],//[['svg-date', '&darr;'], ['svg-ok', '&bull;'], ['svg-delete', '&times;']],
+    icons: ['date', 'now', 'delete'], //[['svg-date', '&darr;'], ['svg-ok', '&bull;'], ['svg-delete', '&times;']],
     idPicker: 'pick-date',
     minWidth: 801,
     qsCalendar: 'input.calendar',
@@ -35,7 +35,7 @@ var main = new(function() {
     if(window.innerWidth < this.opt.minWidth) return;
     this.win = d1.ins('div', '', {id: this.opt.idPicker, className: 'hide'});
     this.win.style.whiteSpace = 'nowrap';
-    d1.b('',[this.win],'click',function(n,e){ e.stopPropagation(); });
+    d1.b('', [this.win], 'click', function(n, e){ e.stopPropagation(); });
     this.toggle(0);
     //document.querySelector('body').appendChild(this.win);
     
@@ -52,15 +52,17 @@ var main = new(function() {
   
   this.toggle = function(on, n){
     if(n){
-      var m;
-      if(Math.min(window.innerWidth, window.innerHeight) < this.opt.sizeLimit) m = 1;
-      else{
-        m = n.getAttribute('data-modal');
-        m = m ? parseInt(m,10) : this.opt.showModal;
-      }
+      var m = n.getAttribute('data-modal');
+      if(m!==null) m = parseInt(m, 10);
+      else m = this.opt.showModal || (Math.min(window.innerWidth, window.innerHeight) < this.opt.sizeLimit);
       if(on){
         this.win.className = m ? 'dlg hide pad' : 'toggle pad';
         (m ? document.body : n.thePop).appendChild(this.win);
+        if(!m) d1.popFrom(n, this.win, 450, 350);
+        else{
+          var s = this.win.style;
+          s.left = s.right = s.top = s.bottom = '';
+        }
       }
     }
     d1.setState(this.win, on);
@@ -71,11 +73,10 @@ var main = new(function() {
     n.type = 'text';
     n.autocomplete = 'off';
     if(n.value) n.value = this.fmt(this.parse(n.value), 0, n.vTime);
-    var pop = d1.ins('div','',{className:'pop l'}, n, -1); //''
+    var pop = d1.ins('div', '', {className:'pop l'}, n, -1); //''
     if(!this.opt.inPop) pop.style.verticalAlign = 'bottom';
     //pop.appendChild(n);
     n.thePop = pop;
-    if(this.opt.inPop) pop.appendChild(n);
     var ico = [];
     var ic = d1.ins('span', '', {}, n, 1);//icons container
     for(var i in this.opt.icons){
@@ -87,6 +88,7 @@ var main = new(function() {
     if(ico[0]) ico[0].addEventListener('click', this.openDialog.bind(this, n, null), false);
     if(ico[1]) ico[1].addEventListener('click', this.closeDialog.bind(this, n, true, null, null), false);
     if(ico[2]) ico[2].addEventListener('click', this.closeDialog.bind(this, n, '', null, null), false);
+    if(this.opt.inPop) pop.appendChild(n);
   }
   
   this.switchMonth = function(n, y, m, d, ch, ci, e){
@@ -273,7 +275,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.75 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.76 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -590,6 +592,19 @@ var main = new(function() {
     });
   }
 
+  this.popFrom = function(n, w, ex, ey){
+    var r = n.getBoundingClientRect();
+    //x
+    var dx = (window.innerWidth - r.left) < Math.min(ex || 450, r.left);
+    w.style.left = dx ? 'auto' : 0;
+    //w.style.right = dx ? (in_pop ? 0 : -r.width + 'px') : 'auto';
+    w.style.right = dx ? (w.parentNode.clientWidth - r.width) + 'px' : 'auto';
+    //y
+    var dy = (window.innerHeight - r.bottom) < Math.min(ey || 250, r.top/2);
+    w.style.top = dy ? 'auto' : '100%';
+    w.style.bottom = dy ? r.height + 'px' : 'auto';
+  }
+  
   this.addHistory = function(h) {
     history.pushState({}, "", h);
     history.pushState({}, "", h);
@@ -1401,6 +1416,7 @@ main = new(function() {
     var pop = n.thePop;
     pop.appendChild(this.win);//.pop
     d1.setState(this.win, 1);
+    d1.popFrom(n.vCap, this.win, 250, 200);
     //this.win.style.top = (this.opt.inPop ? (n.vCap.offsetTop + n.vCap.offsetHeight) : pop.offsetHeight) + 'px';
     //this.win.style.left = '0';
     this.build(n, d);
