@@ -77,17 +77,19 @@ var main = new(function() {
     if(!this.opt.inPop) pop.style.verticalAlign = 'bottom';
     //pop.appendChild(n);
     n.thePop = pop;
-    var ico = [];
-    var ic = d1.ins('span', '', {}, n, 1);//icons container
-    for(var i in this.opt.icons){
-      d1.ins('', ' ', {}, ic);
-      var ii = ic.appendChild(d1.i(this.opt.icons[i]));
-      ii.style.cursor = 'pointer';
-      ico.push(ii);
+    if(this.opt.icons.length>0){
+      var ico = [];
+      var ic = d1.ins('span', '', {className:'input-tools'}, n, 1);//icons container
+      for(var i in this.opt.icons){
+        d1.ins('', ' ', {}, ic);
+        var ii = ic.appendChild(d1.i(this.opt.icons[i]));
+        ii.style.cursor = 'pointer';
+        ico.push(ii);
+      }
+      if(ico[0]) ico[0].addEventListener('click', this.openDialog.bind(this, n, null), false);
+      if(ico[1]) ico[1].addEventListener('click', this.closeDialog.bind(this, n, true, null, null), false);
+      if(ico[2]) ico[2].addEventListener('click', this.closeDialog.bind(this, n, '', null, null), false);
     }
-    if(ico[0]) ico[0].addEventListener('click', this.openDialog.bind(this, n, null), false);
-    if(ico[1]) ico[1].addEventListener('click', this.closeDialog.bind(this, n, true, null, null), false);
-    if(ico[2]) ico[2].addEventListener('click', this.closeDialog.bind(this, n, '', null, null), false);
     if(this.opt.inPop) pop.appendChild(n);
   }
   
@@ -1363,8 +1365,9 @@ main = new(function() {
     if(n.placeholder) m.placeholder = n.placeholder;
     m.autocomplete = 'off';
     var i = null;
-    if(n.getAttribute(this.opt.attrUrl)){
-      i = d1.ins('a', d1.i(this.opt.icon), {}, mc, 1);
+    if(this.opt.icon && n.getAttribute(this.opt.attrUrl)){
+      var ic = d1.ins('span', '', {className:'input-tools'}, mc, 1);//icons container
+      i = d1.ins('a', d1.i(this.opt.icon), {}, ic);
       i.style.cursor = 'pointer';
       d1.ins('', ' ', {}, mc, 1);
     }
