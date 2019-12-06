@@ -1343,15 +1343,14 @@ main = new(function() {
     d1.b('','[data-chain]','',this.updateChain.bind(this));   }
 
   this.prepare = function(n) {
-    var pop = d1.ins('div','',{className:'pop l'});
-    n.parentNode.insertBefore(pop, n);
+    var pop = d1.ins('div', '', {className: 'pop l ' + (this.opt.inPop ? 'js-subinput' : '')}, n, 1);
     if(!this.opt.inPop) pop.style.verticalAlign = 'bottom';
     n.thePop = pop;
     n.classList.add('bg-n');
     n.classList.add('hide');
     //n.type = 'hidden';
     n.vLabel = n.getAttribute(this.opt.attrLabel) || n.value || '';//@@
-    var mc = this.opt.inPop ? pop : d1.ins('span', '', {className:'js-subinput'}, n, 1);
+    var mc = this.opt.inPop ? pop : d1.ins('span', '', {className:'js-subinput'}, pop, 1);
     var m = d1.ins('input', '', {type: 'text', value: n.vLabel, className:'input-lookup'}, mc);
     m.name = 'lookup-' + n.name;
     //m.required = n.required;
