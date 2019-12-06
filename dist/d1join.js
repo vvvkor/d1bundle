@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.46 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.47 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance
@@ -47,11 +47,11 @@ this.setState(n,on);this.updateLinks(on,n);if(!this.noMem){this.store(n,on);//me
 //hash change
 if(e&&e.type=="click"){e.preventDefault();if(this.opt.qsRehash&&n.matches(this.opt.qsRehash)){if(on)this.addHistory("#"+n.id);else location.hash=this.opt.hashCancel}}}}};this.show=function(n){this.handleState(n,null,true)};this.hide=function(n){this.handleState(n,null,false)};this.hideSiblings=function(n){var p=n.parentNode;if(p.matches("ul.accordion li")){this.b(p.parentNode,"ul","",this.hide)}else if(p.matches("ul."+this.opt.cTabs+"+div")){this.b(p,[].slice.call(p.children),"",this.hide)}};this.updateLinks=function(on,n,hash){var id=typeof n==="string"?n:n.id;if(hash)this.b("","."+this.opt.cHashed,"",function(m){m.classList.remove(this.opt.cHashed);m.classList.remove(this.opt.cAct)});if(id)this.b("","a[href='#"+id+"']","",function(m){m.classList[on?"add":"remove"](this.opt.cAct);if(hash)m.classList[on?"add":"remove"](this.opt.cHashed)})};this.popFrom=function(n,w,ex,ey){var r=n.getBoundingClientRect();
 //x
-var dx=window.innerWidth-r.left<Math.min(ex||450,r.left);w.style.left=dx?"auto":0;
+var dx=window.innerWidth-r.left<Math.min(ex||450,r.right);w.style.left=dx?"auto":0;
 //w.style.right = dx ? (in_pop ? 0 : -r.width + 'px') : 'auto';
 w.style.right=dx?w.parentNode.clientWidth-r.width+"px":"auto";
 //y
-var dy=window.innerHeight-r.bottom<Math.min(ey||250,r.top/2);w.style.top=dy?"auto":"100%";w.style.bottom=dy?r.height+"px":"auto"};this.addHistory=function(h){history.pushState({},"",h);history.pushState({},"",h);history.go(-1)};this.store=function(n,on){if(n&&n.id&&localStorage&&n.matches(this.opt.qsMem)){
+var dy=window.innerHeight-r.bottom<Math.min(ey||250,r.top);w.style.top=dy?"auto":"100%";w.style.bottom=dy?r.height+"px":"auto"};this.addHistory=function(h){history.pushState({},"",h);history.pushState({},"",h);history.go(-1)};this.store=function(n,on){if(n&&n.id&&localStorage&&n.matches(this.opt.qsMem)){
 //localStorage[on ? "setItem" : "removeItem"]("vis#" + n.id, 1); //store only shown
 localStorage.setItem("vis#"+n.id,on?1:0);//also store hidden
 }};this.restore=function(n,e){this.noMem=1;
