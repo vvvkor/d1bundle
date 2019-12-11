@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.52 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.53 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance
@@ -6,7 +6,7 @@ if(window&&window.d1){console.log("d1 already included")}else{
 // begin module
 var main=new function(){"use strict";this.name="d1";this.opt={cAct:"act",cAlert:"alert",cClose:"close",cDialog:"dialog",cGallery:"gal",cHide:"hide",cIcon:"icon",cTabs:"tabs",hashCancel:"#cancel",
 //internal
-cToggle:"toggle",cJsControl:"js-control",cJsHide:"js-hide",cHashed:"js-hashed",attrStr:"data-str",detectPop:true,minDesktop:880,qsEsc:".pop>div.toggle, .nav.toggle ul",//, .dlg, .full
+cToggle:"toggle",cJsControl:"js-control",cJsHide:"js-hide",cHashed:"js-hashed",attrStr:"data-str",detectPop:true,minDesktop:880,pub:true,qsEsc:".pop>div.toggle, .nav.toggle ul",//, .dlg, .full
 qsMem:".mem, ul.tabs.mem+div>div, ul.mem ul[id]",qsRehash:"",
 //secondary
 qsJsShow:".js-control:not(.js-hide)"};this.str={cancel:"Cancel",ok:"OK",
@@ -122,9 +122,9 @@ this.b("",[window],"resize",this.onResize)}};
 // end module
 // var isNode    = (typeof module !== 'undefined' && this.module !== module); // use module or global
 // var isBrowser = (typeof window !== 'undefined' && this.window === this);
-if(typeof module!=="undefined"){
+var m=typeof module!=="undefined";if(m){
 //console.log("npm require d1", module);
-module.exports=main}else if(window){
+module.exports=main}if(window&&(!m||main.opt.pub)){
 //console.log("browser include d1");
 window.d1=main}}})(window,document,Element);/*! d1dialog https://github.com/vvvkor/d1dialog */
 /* Replacement of standard Javascript dialogs: alert, confirm, prompt */
