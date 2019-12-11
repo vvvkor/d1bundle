@@ -277,7 +277,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.81 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.83 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
