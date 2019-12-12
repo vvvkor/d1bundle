@@ -277,7 +277,7 @@ var main = new(function() {
   else if(window) d1calendar = main;
 })();
 },{"d1css":2}],2:[function(require,module,exports){
-/*! d1css v1.2.84 https://github.com/vvvkor/d1 */
+/*! d1css v1.2.85 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 
 (function(window, document, Element) {
@@ -382,7 +382,7 @@ var main = new(function() {
       for (i in cfg.str) this.str[i] = cfg.str[i];
       for (i in cfg.ico) this.ico[i] = cfg.ico[i];
       if(typeof module !== "undefined" && window && this.opt.pub){
-        console.log('npm set win.d1');
+        //console.log('npm set win.d1');
         window.d1 = this;
       }
     }
@@ -875,11 +875,11 @@ var main = new(function() {
 // var isBrowser = (typeof window !== 'undefined' && this.window === this);
 
     if (typeof module !== "undefined") {
-      console.log("npm require d1", module);
+      //console.log("npm require d1", module);
       module.exports = main;
     }
     else if (window) {
-      console.log("browser include d1");
+      //console.log("browser include d1");
       window.d1 = main;
     }
   }

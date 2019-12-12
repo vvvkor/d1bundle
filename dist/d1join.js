@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.56 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.57 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance
@@ -29,7 +29,9 @@ _delete:"&#x2715;",_edit:"&rarr;",_now:"&#x2713;",//'&bull;',
 _date:"#",//'&#x274f;',//'&darr;',
 _prev:"&lsaquo;",_next:"&rsaquo;",_prev2:"&laquo;",_next2:"&raquo;"};this.ico={};this.noMem=0;this.plugins=[];
 //common
-this.loadAll=function(cfg){this.load(this,cfg)};this.load=function(obj,cfg){if(!obj)obj=this;this.b("",[document],"DOMContentLoaded",typeof obj==="function"?obj:obj.init.bind(obj,cfg))};this.init=function(cfg){if(!cfg){cfg=document.body.getAttribute("data-d1");if(cfg)cfg=JSON.parse(cfg)}var i;if(cfg){var opt=cfg.opt||cfg;for(i in opt)this.opt[i]=opt[i];for(i in cfg.str)this.str[i]=cfg.str[i];for(i in cfg.ico)this.ico[i]=cfg.ico[i];if(typeof module!=="undefined"&&window&&this.opt.pub){console.log("npm set win.d1");window.d1=this}}this.opt.qsJsShow="."+this.opt.cJsControl+":not(."+this.opt.cJsHide+")";if(location.hash=="#disable-js")return;if(window&&!Element.prototype.matches)Element.prototype.matches=Element.prototype.msMatchesSelector;//ie9+
+this.loadAll=function(cfg){this.load(this,cfg)};this.load=function(obj,cfg){if(!obj)obj=this;this.b("",[document],"DOMContentLoaded",typeof obj==="function"?obj:obj.init.bind(obj,cfg))};this.init=function(cfg){if(!cfg){cfg=document.body.getAttribute("data-d1");if(cfg)cfg=JSON.parse(cfg)}var i;if(cfg){var opt=cfg.opt||cfg;for(i in opt)this.opt[i]=opt[i];for(i in cfg.str)this.str[i]=cfg.str[i];for(i in cfg.ico)this.ico[i]=cfg.ico[i];if(typeof module!=="undefined"&&window&&this.opt.pub){
+//console.log('npm set win.d1');
+window.d1=this}}this.opt.qsJsShow="."+this.opt.cJsControl+":not(."+this.opt.cJsHide+")";if(location.hash=="#disable-js")return;if(window&&!Element.prototype.matches)Element.prototype.matches=Element.prototype.msMatchesSelector;//ie9+
 this.getStrings();this.refresh();this.initPlugins(cfg?cfg.plug:{})};this.plug=function(p){this.plugins.push(p)};this.initPlugins=function(opts){for(var i in this.plugins)this.plugins[i].init(opts?opts[this.plugins[i].name]:{})};this.q=function(s,i,n){if(!s||s.match(/\.\d|[?&]/))return i===undefined?[]:null;var f=i===0?"querySelector":"querySelectorAll";var a=(n||document)[f](s);if(i)a=a[i<0?a.length+i:i];return a};this.b=function(n,sel,type,fn){var a=typeof sel==="string"?(n||document).querySelectorAll(sel):sel;if(a.length)[].forEach.call(a,this.handle.bind(this,type,fn))};this.handle=function(type,fn,n){type?n.addEventListener(type,fn.bind(this,n),false):fn.call(this,n)};this.ancestor=function(q,n){
 //return n.parentNode.closest(q); //-ie
 do{if(n.matches&&n.matches(q))return n}while(n=n.parentNode)}
@@ -122,7 +124,11 @@ this.b("",[window],"resize",this.onResize)}};
 // end module
 // var isNode    = (typeof module !== 'undefined' && this.module !== module); // use module or global
 // var isBrowser = (typeof window !== 'undefined' && this.window === this);
-if(typeof module!=="undefined"){console.log("npm require d1",module);module.exports=main}else if(window){console.log("browser include d1");window.d1=main}}})(window,document,Element);/*! d1dialog https://github.com/vvvkor/d1dialog */
+if(typeof module!=="undefined"){
+//console.log("npm require d1", module);
+module.exports=main}else if(window){
+//console.log("browser include d1");
+window.d1=main}}})(window,document,Element);/*! d1dialog https://github.com/vvvkor/d1dialog */
 /* Replacement of standard Javascript dialogs: alert, confirm, prompt */
 //a.alert([title]|[data-caption])
 //a.dialog[href]([title]|[data-caption])[data-prompt][data-src][data-ok][data-cancel][data-reverse]

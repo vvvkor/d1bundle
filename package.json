@@ -1,6 +1,6 @@
 {
   "name": "d1bundle",
-  "version": "1.0.56",
+  "version": "1.0.57",
   "description": "d1 bundle",
   "main": "dist/d1bundle.js",
   "directories": {
@@ -40,7 +40,7 @@
     "copyfiles": "^2.1.1",
     "cross-var": "^1.1.0",
     "d1calendar": "^1.2.21",
-    "d1css": "^1.2.84",
+    "d1css": "^1.2.85",
     "d1dialog": "^1.2.11",
     "d1edit": "^1.2.16",
     "d1gallery": "^1.2.8",
