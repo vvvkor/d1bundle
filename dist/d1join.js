@@ -1,4 +1,4 @@
-/*! d1bundle v1.0.57 https://github.com/vvvkor/d1 */
+/*! d1bundle v1.0.58 https://github.com/vvvkor/d1 */
 /* Enhancements for d1css microframework */
 (function(window,document,Element){"use strict";
 //check single instance

@@ -1,6 +1,6 @@
 {
   "name": "d1bundle",
-  "version": "1.0.57",
+  "version": "1.0.59",
   "description": "d1 bundle",
   "main": "dist/d1bundle.js",
   "directories": {
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vvvkor/d1"
+    "url": "git+https://github.com/vvvkor/d1bundle"
   },
   "keywords": [
     "css",
